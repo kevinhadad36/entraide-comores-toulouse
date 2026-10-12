@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://kevinhadad36.github.io/entraide-comores-toulouse/sitemap.xml
