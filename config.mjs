@@ -10,7 +10,7 @@ export const CONFIG = {
 
   // Contacts (vides = masqués)
   EMAIL:       env.EMAIL       || '',
-  WHATSAPP:    env.WHATSAPP    || '',   // format international sans + ni espaces, ex. 33612345678
+  WHATSAPP:    env.WHATSAPP    || '33641478339',   // format international sans + ni espaces, ex. 33612345678
 
   // Formulaire d'adhésion : URL d'envoi (Formspree, Web3Forms, Getform…).
   // Vide = les réponses sont envoyées par WhatsApp (si WHATSAPP) ou par e-mail (si EMAIL).

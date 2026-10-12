@@ -73,7 +73,8 @@
   var labels = { prenom: 'Prénom', nom: 'Nom', telephone: 'Téléphone', email: 'E-mail', ville: 'Ville', profil: 'Profil', entreprise: 'Entreprise / projet', secteur: 'Secteur', activite: 'Activité', apports: 'Peut apporter', besoins: 'Cherche', idee_nom: 'Idée de nom', message: 'Message', annuaire: 'Annuaire', source: 'Source' };
   var summary = function (fd) {
     var o = {};
-    fd.forEach(function (v, k) { if (labels[k] && String(v).trim()) o[k] = o[k] ? o[k] + ', ' + v : v; });
+    fd.forEach(function (v, k) { if (labels[k] && k !== 'source' && String(v).trim()) o[k] = o[k] ? o[k] + ', ' + v : v; });
+    o.source = src;
     return 'Nouvelle adhésion\n\n' + Object.keys(o).map(function (k) { return labels[k] + ' : ' + o[k]; }).join('\n');
   };
 
@@ -96,7 +97,9 @@
         .catch(function () { show('L’envoi n’a pas fonctionné. Vérifiez votre connexion et réessayez.', true); })
         .then(function () { btn.disabled = false; btn.firstChild.textContent = 'Envoyer mon adhésion '; });
     } else if (wa) {
-      window.open('https://wa.me/' + wa + '?text=' + encodeURIComponent(summary(fd)), '_blank'); success();
+      window.open('https://wa.me/' + wa + '?text=' + encodeURIComponent(summary(fd)), '_blank');
+      done.querySelector('p').innerHTML = '<b>Dernière étape :</b> dans la conversation WhatsApp qui vient de s’ouvrir, appuyez sur « Envoyer » pour que votre adhésion nous parvienne. Ensuite, partagez le formulaire autour de vous : plus nous serons nombreux, plus le réseau sera utile à chacun.';
+      success();
     } else if (mail) {
       location.href = 'mailto:' + mail + '?subject=' + encodeURIComponent('Adhésion au réseau') + '&body=' + encodeURIComponent(summary(fd)); success();
     } else {
