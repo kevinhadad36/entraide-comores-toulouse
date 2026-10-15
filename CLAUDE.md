@@ -3,7 +3,7 @@ Déployé sur GitHub Pages : https://kevinhadad36.github.io/entraide-comores-tou
 
 - Association en cours de création, **pas encore de nom** : nom provisoire dans `config.mjs` (NAME / SHORT), changer là et rebuild.
 - Piliers : réseautage, annuaire des membres (« cherchez chez nous d'abord »), partage de compétences/infos, projets d'envergure, financement halal (soutien direct ou accompagnement), cagnotte communautaire.
-- Style : Refero « Ramp » (https://styles.refero.design/style/b38702a0-75ab-474c-9106-00b624535825) — Bone #f4f2f0, Ink #0c0a08, Obsidian #1a1919, accent unique Highlighter #e4f222 (rappel du jaune du drapeau). Inter / Inter Tight en 400 uniquement, filets fins, pas d'ombres, rayons 6/10/12/16.
+- Style : Refero « Ramp » (https://styles.refero.design/style/b38702a0-75ab-474c-9106-00b624535825), **couleurs alignées sur le formulaire d'inscription** (dépôt inscription-comoriens-toulouse) : fond #f7f5ef, texte #1b1f1c, vert #1f6b3a (boutons), vert foncé #154d29 (bandes sombres, pied de page), jaune #f6c21c (surlignage), bande drapeau en haut. Logo vert, croissant et étoiles blancs. Inter / Inter Tight en 400 uniquement, filets fins, pas d'ombres, rayons 6/10/12/16.
 - Logo : croissant + 4 étoiles (généré dans build.mjs).
 - Règles : aucun chiffre, membre, témoignage, montant ou partenaire inventé. Voix « nous », ton chaleureux.
 

@@ -21,7 +21,7 @@ const star = (cx, cy, r) => {
   }
   return `<polygon points="${p.join(' ')}"/>`;
 };
-const LOGO = (id = 'm') => `<svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#0c0a08"/><mask id="${id}"><rect width="32" height="32" fill="#fff"/><circle cx="19" cy="16" r="8.4" fill="#000"/></mask><circle cx="15" cy="16" r="10" fill="#e4f222" mask="url(#${id})"/><g fill="#e4f222">${star(20.6, 9.6, 1.55)}${star(22.3, 13.9, 1.55)}${star(22.3, 18.1, 1.55)}${star(20.6, 22.4, 1.55)}</g></svg>`;
+const LOGO = (id = 'm') => `<svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#1f6b3a"/><mask id="${id}"><rect width="32" height="32" fill="#fff"/><circle cx="19" cy="16" r="8.4" fill="#000"/></mask><circle cx="15" cy="16" r="10" fill="#fff" mask="url(#${id})"/><g fill="#fff">${star(20.6, 9.6, 1.55)}${star(22.3, 13.9, 1.55)}${star(22.3, 18.1, 1.55)}${star(20.6, 22.4, 1.55)}</g></svg>`;
 fs.mkdirSync(path.join(DIR, 'assets'), { recursive: true });
 out('assets/logo.svg', `<svg xmlns="http://www.w3.org/2000/svg" ${LOGO('f').slice(5)}`);
 
@@ -65,7 +65,7 @@ function page({ slug = '', title, desc, body, minimal = false }) {
 <meta property="og:url" content="${url}"><meta property="og:image" content="${C.BASE}/assets/og.png">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#f4f2f0">
+<meta name="theme-color" content="#f7f5ef">
 <link rel="icon" href="${root}assets/logo.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Inter+Tight:wght@400&display=swap" rel="stylesheet">
