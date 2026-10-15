@@ -15,8 +15,8 @@ export const CONFIG = {
   // Formulaire d'inscription (/adherer/) → base Supabase (schéma : supabase/schema.sql).
   // Supabase > Project Settings > API : « Project URL » et clé « anon public » (faite pour être publique).
   // Vides = chaque inscription est envoyée sur le WhatsApp ci-dessus, pour ne rien perdre en attendant la base.
-  SUPABASE_URL:      env.SUPABASE_URL      || '',
-  SUPABASE_ANON_KEY: env.SUPABASE_ANON_KEY || '',
+  SUPABASE_URL:      env.SUPABASE_URL      || 'https://utbvktkbezddzfegusnn.supabase.co',
+  SUPABASE_ANON_KEY: env.SUPABASE_ANON_KEY || 'sb_publishable_UJd7950cUkryxQ-GEeLGiw_Kq7kqKWE',
 
   // Cagnotte (HelloAsso conseillé). Vides = « ouverture prochaine ».
   CAGNOTTE_URL:     env.CAGNOTTE_URL     || '',  // lien de la page de don

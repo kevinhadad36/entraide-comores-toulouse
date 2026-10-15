@@ -18,6 +18,12 @@ Déployé sur GitHub Pages : https://kevinhadad36.github.io/entraide-comores-tou
 Ne pas éditer les .html à la main. Source : `build.mjs`, `config.mjs`, `articles.mjs`, `members.json`, `assets/style.css`, `assets/app.js`, `assets/inscription.js`.
 - `node build.mjs`
 - Formulaire `/adherer/` : envoi vers Supabase (`SUPABASE_URL` + `SUPABASE_ANON_KEY`, schéma `supabase/schema.sql`) ; tant que c'est vide, chaque inscription part en message WhatsApp pré-rempli vers `WHATSAPP`.
+
+## Base Supabase (branchée le 15/10/2026)
+- Compte Supabase de Kevin (profil Chrome kevinbouisset269@gmail.com), organisation « kevinbst », projet `utbvktkbezddzfegusnn` (région Londres eu-west-2, plan gratuit : pause après 7 jours sans activité).
+- Schéma `supabase/schema.sql` exécuté et testé (lecture domaines, refus de lecture sur membres, inscription via RPC, consentement obligatoire, âge calculé). Base vide après les tests.
+- Valider une fiche : Table Editor > membres > passer `statut` de `en_attente` à `valide` (seules les fiches validées apparaissent dans `annuaire_public`). Vue complète avec l'âge : `membres_admin`.
+- Ne jamais demander ni utiliser le mot de passe de la base ni la clé service_role : le site n'a besoin que de la clé publishable.
 - Liste des domaines : `DOMAINES` dans build.mjs, à garder alignée avec la table `domaines` du schéma.
 - Cagnotte : `CAGNOTTE_URL` (HelloAsso), `CAGNOTTE_WIDGET`, `CAGNOTTE_PROJECT`, `CAGNOTTE_TEXT`, `CAGNOTTE_GOAL`, `CAGNOTTE_RAISED`.
 - Annuaire : ajouter les membres (avec leur accord) dans `members.json` :
