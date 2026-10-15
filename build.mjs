@@ -1,4 +1,4 @@
-// Génère le site : index.html, une page par section (reseautage/, annuaire/, competences/, projets/, financement/, cagnotte/),
+// Génère le site : index.html, une page par section (reseautage/, annuaire/, competences/, projets/, accompagnement/, cagnotte/),
 // blog/ (+ un dossier par article), adherer/ (formulaire d'inscription), mentions-legales/, sitemap.xml, robots.txt.
 // Usage : node build.mjs   (réglages dans config.mjs ; membres dans members.json ; articles dans articles.mjs)
 import fs from 'node:fs';
@@ -46,7 +46,7 @@ const I = {
 // ---------- gabarit commun ----------
 const NAV = [
   ['reseautage/', 'Réseautage'], ['annuaire/', 'Annuaire'], ['competences/', 'Compétences'], ['projets/', 'Projets'],
-  ['financement/', 'Financement'], ['cagnotte/', 'Cagnotte'], ['blog/', 'Blog'],
+  ['accompagnement/', 'Accompagnement'], ['cagnotte/', 'Cagnotte'], ['blog/', 'Blog'],
 ];
 const analytics = C.UMAMI_ID ? `<script defer src="https://cloud.umami.is/script.js" data-website-id="${C.UMAMI_ID}"></script>` : '';
 
@@ -89,7 +89,7 @@ ${body(root)}
 </main>
 <footer><div class="wrap">
 <div class="foot">
-<div>${brand}<p style="margin-top:18px;max-width:38ch">${esc(C.NAME)} : entraide, réseau et financement éthique entre entrepreneurs de la communauté comorienne.</p></div>
+<div>${brand}<p style="margin-top:18px;max-width:38ch">${esc(C.NAME)} : entraide, réseau et accompagnement des entrepreneurs de la communauté comorienne.</p></div>
 <div><h4>Le réseau</h4><ul><li><a href="${root || './'}">Accueil</a></li>${NAV.map(([h, l]) => `<li><a href="${root}${h}">${l}</a></li>`).join('')}<li><a href="${root}adherer/">Adhérer</a></li></ul></div>
 <div><h4>Contact</h4><ul>${C.WHATSAPP ? `<li><a href="https://wa.me/${C.WHATSAPP}">WhatsApp</a></li>` : ''}${C.EMAIL ? `<li><a href="mailto:${C.EMAIL}">${esc(C.EMAIL)}</a></li>` : ''}<li><a href="${root}adherer/">Formulaire d’adhésion</a></li><li><a href="${root}mentions-legales/">Mentions légales</a></li></ul></div>
 </div>
@@ -105,14 +105,14 @@ const PILLARS = [
   { n: '02', ic: 'search', t: 'Se trouver', d: 'Un plombier, un comptable, un traiteur, un développeur ? Avant d’aller chercher ailleurs, cherchez chez nous : l’annuaire des membres est fait pour ça.', href: 'annuaire/', more: 'Ouvrir l’annuaire', wide: true },
   { n: '03', ic: 'share', t: 'Partager', d: 'Compétences, bons plans, démarches administratives, retours d’expérience : ce que l’un a appris, tout le monde en profite.', href: 'competences/', more: 'Le partage de compétences' },
   { n: '04', ic: 'build', t: 'Bâtir', d: 'Des projets d’envergure, communautaires ou non, que personne ne porterait seul. Nous mettons en commun les moyens et les savoir-faire.', href: 'projets/', more: 'Les projets' },
-  { n: '05', ic: 'seed', t: 'Financer', d: 'Soutenir les nouveaux entrepreneurs de la diaspora : un coup de pouce de l’association ou un accompagnement vers des financements halal.', href: 'financement/', more: 'Le volet financement', hl: true },
+  { n: '05', ic: 'seed', t: 'Se lancer', d: 'Créer son entreprise, choisir son statut, trouver un local, être conseillé : le réseau accompagne celles et ceux qui veulent entreprendre.', href: 'accompagnement/', more: 'L’accompagnement', hl: true },
 ];
 const FAQ = [
   ['Faut-il être comorien pour adhérer ?', 'Le réseau est pensé pour la communauté comorienne de Toulouse et de sa région, et pour toutes celles et ceux qui ont un lien avec les Comores. Vous vous posez la question ? Remplissez le formulaire, nous en parlerons ensemble.'],
   ['Je ne suis pas encore entrepreneur, je peux venir ?', 'Oui, et c’est même une des raisons d’être du réseau. Porteurs de projet, étudiants, salariés qui veulent se lancer : vous trouverez ici des gens qui sont passés par là.'],
   ['L’adhésion est-elle payante ?', 'Le formulaire est gratuit et ne vous engage à rien. Les modalités de cotisation seront fixées collectivement lors de la création officielle de l’association, et communiquées à tous les inscrits.'],
-  ['Faut-il habiter Toulouse ?', 'Les rencontres ont lieu à Toulouse et autour. Le volet financement et accompagnement peut s’ouvrir plus largement à la diaspora en France : inscrivez-vous en précisant votre ville.'],
-  ['Qu’entendez-vous par « financement halal » ?', 'Un financement sans intérêt (sans riba), qui ne repose pas sur la spéculation et qui partage le risque plutôt que de le faire porter au seul emprunteur. Concrètement : prêts à taux zéro, apports en capital, financement participatif, contrats de finance islamique quand ils sont disponibles.'],
+  ['Faut-il habiter Toulouse ?', 'Les rencontres ont lieu à Toulouse et autour. L’accompagnement peut s’ouvrir plus largement à la diaspora en France : inscrivez-vous en précisant votre ville.'],
+  ['Je veux créer mon entreprise, par où commencer ?', 'Remplissez le formulaire en indiquant votre projet : nous faisons le point avec vous sur le statut le plus adapté (micro-entreprise, entreprise individuelle, société), les démarches, et nous vous mettons en relation avec des membres qui sont passés par là.'],
   ['Qui voit mes informations ?', 'Votre âge, votre téléphone, votre e-mail et votre adresse ne sont jamais publiés. Dans l’annuaire, vous choisissez d’apparaître sous votre prénom ou de façon anonyme, et vous pouvez demander à tout moment la modification ou la suppression de vos données.'],
 ];
 
@@ -124,14 +124,14 @@ const postCard = (a, r) => `<a class="card post reveal" href="${r}blog/${a.slug}
 </a>`;
 
 const home = page({
-  title: `${C.NAME} · Entraide, réseau et financement halal`,
-  desc: 'Le réseau d’entraide des entrepreneurs comoriens de Toulouse : rencontres, annuaire des membres, partage de compétences, projets communs et financement halal. Rejoignez les membres fondateurs.',
+  title: `${C.NAME} · Entraide, réseau et accompagnement`,
+  desc: 'Le réseau d’entraide des entrepreneurs comoriens de Toulouse : rencontres, annuaire des membres, partage de compétences, projets communs et accompagnement à la création d’entreprise. Rejoignez les membres fondateurs.',
   body: r => `
 <div class="hero"><div class="wrap hero-grid">
   <div>
     <span class="label">Karibu · Toulouse &amp; Occitanie</span>
     <h1>Entreprendre <span class="hl">ensemble</span>, entre Comoriens de Toulouse.</h1>
-    <p class="lead">Un réseau d’entraide pour les entrepreneurs, indépendants et porteurs de projet de la communauté. On se connaît, on se recommande, on se finance, et on bâtit ensemble.</p>
+    <p class="lead">Un réseau d’entraide pour les entrepreneurs, indépendants et porteurs de projet de la communauté. On se connaît, on se recommande, on s’accompagne, et on bâtit ensemble.</p>
     <div class="cta">
       <a class="btn btn-hl" href="${r}adherer/">Rejoindre le réseau ${I.arrow}</a>
       <a class="btn btn-out" href="${r}annuaire/">Trouver un pro de chez nous</a>
@@ -146,14 +146,14 @@ const home = page({
         <li><span class="ic">${I.users}</span><div><b>Rencontres entre membres</b><small>Réseautage, mises en relation</small></div><span class="st">Réseau</span></li>
         <li><span class="ic">${I.share}</span><div><b>Partage de compétences</b><small>Ateliers, bons plans, démarches</small></div><span class="st">Savoir</span></li>
         <li><span class="ic">${I.build}</span><div><b>Projets d’envergure</b><small>Communautaires ou non</small></div><span class="st">Projets</span></li>
-        <li><span class="ic">${I.seed}</span><div><b>Financement sans intérêt</b><small>Coup de pouce ou accompagnement</small></div><span class="st go">Halal</span></li>
+        <li><span class="ic">${I.seed}</span><div><b>Accompagnement</b><small>Création d’entreprise, conseils, local</small></div><span class="st go">Se lancer</span></li>
       </ul>
     </div>
   </div>
 </div></div>
 
 <div class="ticker on-dark"><div class="wrap"><ul>
-  ${[['reseautage/', 'Réseautage'], ['annuaire/', 'Annuaire des membres'], ['competences/', 'Partage de compétences'], ['projets/', 'Projets d’envergure'], ['financement/', 'Financement halal'], ['cagnotte/', 'Cagnotte communautaire']]
+  ${[['reseautage/', 'Réseautage'], ['annuaire/', 'Annuaire des membres'], ['competences/', 'Partage de compétences'], ['projets/', 'Projets d’envergure'], ['accompagnement/', 'Accompagnement'], ['cagnotte/', 'Cagnotte communautaire']]
     .map(([h, l], i) => `<li><a href="${r}${h}"><span>0${i + 1}</span>${l}</a></li>`).join('')}
 </ul></div></div>
 
@@ -188,15 +188,15 @@ const home = page({
 
 <section style="padding-top:0"><div class="wrap">
   <div class="dark on-dark reveal">
-    <div><span class="label">Financement</span><h2 style="margin:16px 0 18px">Financer nos projets, sans riba.</h2>
-    <p>Lancer une activité demande des fonds. Nous voulons que les nouveaux entrepreneurs de la diaspora puissent le faire sans renoncer à leurs valeurs : soutien direct de l’association quand c’est possible, et accompagnement vers des solutions sans intérêt.</p>
-    <div class="cta" style="margin-top:28px"><a class="btn btn-hl" href="${r}financement/">Découvrir le volet financement ${I.arrow}</a></div></div>
+    <div><span class="label">Accompagnement</span><h2 style="margin:16px 0 18px">Vous voulez vous lancer ? On vous accompagne.</h2>
+    <p>Auto-entrepreneur, société, commerce, artisanat : le réseau aide celles et ceux de la communauté qui veulent entreprendre, de l’idée jusqu’à l’ouverture, avec l’expérience de ceux qui sont déjà passés par là.</p>
+    <div class="cta" style="margin-top:28px"><a class="btn btn-hl" href="${r}accompagnement/">Découvrir l’accompagnement ${I.arrow}</a></div></div>
     <ul class="dark-list">
-      <li>Prêts à taux zéro<span>prêts d’honneur</span></li>
-      <li>Apports en capital<span>associés, membres</span></li>
-      <li>Financement participatif<span>don ou capital</span></li>
-      <li>Finance islamique<span>mourabaha, moucharaka…</span></li>
-      <li>Coup de pouce du réseau<span>selon les fonds</span></li>
+      <li>Choisir son statut<span>micro-entreprise, société…</span></li>
+      <li>Créer son entreprise<span>démarches pas à pas</span></li>
+      <li>Conseils d’entrepreneurs<span>des membres expérimentés</span></li>
+      <li>Trouver un local<span>boutique, atelier, bureaux</span></li>
+      <li>Les bons contacts<span>dans la communauté</span></li>
     </ul>
   </div>
 </div></section>
@@ -206,7 +206,7 @@ const home = page({
   <ul class="who">
     <li><b>Entrepreneurs installés</b><span>Trouvez des partenaires et des clients de confiance, transmettez votre expérience.</span></li>
     <li><b>Indépendants &amp; artisans</b><span>Faites-vous connaître auprès de la communauté et sortez de l’isolement.</span></li>
-    <li><b>Porteurs de projet</b><span>Profitez de conseils concrets et d’un accompagnement vers le financement.</span></li>
+    <li><b>Porteurs de projet</b><span>Profitez de conseils concrets et d’un accompagnement jusqu’à l’ouverture.</span></li>
     <li><b>Étudiants &amp; jeunes diplômés</b><span>Rencontrez celles et ceux qui ont déjà fait le chemin.</span></li>
     <li><b>Soutiens</b><span>Pas entrepreneur, mais envie de contribuer ? Vos compétences et votre réseau comptent.</span></li>
   </ul>
@@ -218,7 +218,7 @@ const home = page({
     <div class="card reveal wide"><span class="num">Entraide</span><h3>On se recommande d’abord.</h3><p>Quand un membre a besoin d’un service, le réflexe est de regarder dans le réseau.</p></div>
     <div class="card reveal wide"><span class="num">Confiance</span><h3>La parole donnée compte.</h3><p>Sérieux, délais tenus, travail bien fait : la réputation de chacun fait celle de tous.</p></div>
     <div class="card reveal wide"><span class="num">Transmission</span><h3>Les anciens ouvrent la route.</h3><p>Ceux qui ont réussi accompagnent ceux qui commencent. C’est ainsi que la communauté grandit.</p></div>
-    <div class="card reveal wide"><span class="num">Éthique</span><h3>Une finance qui nous ressemble.</h3><p>Pas d’intérêt, pas de spéculation : des financements en accord avec nos valeurs.</p></div>
+    <div class="card reveal wide"><span class="num">Valeurs</span><h3>Entreprendre selon nos valeurs.</h3><p>Honnêteté, sérieux et respect de nos principes : réussir sans renoncer à ce que nous sommes.</p></div>
   </div>
 </div></section>
 
@@ -414,56 +414,59 @@ ${MEMBERS.length ? `
 });
 out('annuaire/index.html', annuaire);
 
-// ---------- FINANCEMENT ----------
-const financement = page({
-  slug: 'financement/',
-  title: `Financement halal des entrepreneurs · ${C.NAME}`,
-  desc: 'Comment nous aidons les nouveaux entrepreneurs de la diaspora comorienne à financer leur projet sans intérêt : soutien du réseau, prêts à taux zéro, apports en capital, finance islamique.',
+// ---------- ACCOMPAGNEMENT (ex-« Financement ») ----------
+// Volonté de Kevin : présenter d'abord l'accompagnement à l'entrepreneuriat ; le financement halal vient en dernier,
+// avec douceur (la communauté n'y est pas habituée). Ne pas le remettre en avant sans son accord.
+const accompagnement = page({
+  slug: 'accompagnement/',
+  title: `Accompagnement des entrepreneurs · ${C.NAME}`,
+  desc: 'Se lancer dans l’entrepreneuriat avec le soutien de la communauté comorienne de Toulouse : création d’entreprise, conseils, recherche de local ou de bureaux.',
   body: r => `
 <div class="page-hero"><div class="wrap">
-  <p class="crumb"><a href="${r}">Accueil</a> › Financement</p>
-  <span class="label">Financement &amp; accompagnement</span>
-  <h1>Lancer son projet, sans renoncer à ses valeurs.</h1>
-  <p class="lead">Beaucoup d’entre nous renoncent à un crédit classique à cause des intérêts. Nous voulons que ce ne soit plus un frein : le réseau aide les nouveaux entrepreneurs de la diaspora à trouver un financement halal.</p>
-  <div class="cta" style="margin-top:28px"><a class="btn btn-hl" href="${r}adherer/">Présenter mon projet ${I.arrow}</a></div>
+  <p class="crumb"><a href="${r}">Accueil</a> › Accompagnement</p>
+  <span class="label">Accompagnement</span>
+  <h1>Se lancer, sans être seul.</h1>
+  <p class="lead">Créer son activité, c’est beaucoup de questions : quel statut choisir, quelles démarches, où s’installer ? Le réseau accompagne celles et ceux de la communauté qui veulent entrer dans le monde de l’entrepreneuriat, avec l’expérience de ceux qui sont déjà passés par là.</p>
+  <div class="cta" style="margin-top:28px"><a class="btn btn-hl" href="${r}adherer/">Être accompagné ${I.arrow}</a></div>
 </div></div>
 
 <section><div class="wrap">
-  <div class="head split"><div><span class="label">Deux façons de vous aider</span><h2 style="margin-top:16px">Le réseau finance, ou vous accompagne.</h2></div><p>Selon votre projet et les moyens de l’association, nous intervenons directement, ou nous vous aidons à aller chercher les bons financements.</p></div>
+  <div class="head split"><div><span class="label">Ce que nous proposons</span><h2 style="margin-top:16px">De l’idée à l’ouverture.</h2></div><p>Selon votre projet, nous vous orientons, vous conseillons et vous mettons en relation avec les bons membres du réseau.</p></div>
   <div class="pillars">
-    <div class="card hl wide reveal"><span class="icon">${I.seed}</span><span class="num">Voie 1</span><h3>Le coup de pouce du réseau</h3><p>À mesure que l’association grandit, une partie de ses ressources (cotisations, dons, cagnotte) pourra soutenir directement des projets de membres, sans intérêt.</p><ul><li>Avance remboursable sans intérêt</li><li>Mise en relation avec des membres prêts à investir comme associés</li><li>Les règles d’attribution seront décidées collectivement</li></ul></div>
-    <div class="card wide reveal"><span class="icon">${I.users}</span><span class="num">Voie 2</span><h3>L’accompagnement vers le bon financement</h3><p>Nous vous aidons à structurer votre dossier et à identifier les solutions compatibles avec vos valeurs.</p><ul><li>Préparation du projet : business plan, prévisionnel, besoins</li><li>Orientation vers les solutions sans intérêt adaptées</li><li>Relecture du dossier par des membres expérimentés</li><li>Suivi après le lancement</li></ul></div>
+    <div class="card wide reveal"><span class="icon">${I.build}</span><h3>Créer son entreprise</h3><p>Nous vous aidons à choisir la forme qui vous correspond et à faire les démarches pas à pas.</p><ul><li>Micro-entreprise (auto-entrepreneur)</li><li>Entreprise individuelle</li><li>Société : SASU, EURL, SAS, SARL…</li><li>Immatriculation, déclarations, premiers papiers</li></ul></div>
+    <div class="card wide reveal"><span class="icon">${I.chat}</span><h3>Des conseils d’entrepreneurs</h3><p>Des membres qui ont déjà lancé leur activité partagent ce qu’ils ont appris.</p><ul><li>Construire son projet et trouver ses premiers clients</li><li>Prix, devis, facturation, comptabilité</li><li>Communication et présence en ligne</li><li>Un membre expérimenté pour vous suivre</li></ul></div>
+    <div class="card wide reveal"><span class="icon">${I.search}</span><h3>Trouver un local ou des bureaux</h3><p>Boutique, atelier, bureau, cuisine professionnelle : le réseau fait circuler les bonnes adresses et les opportunités entre membres.</p></div>
+    <div class="card wide reveal"><span class="icon">${I.users}</span><h3>Les bons contacts</h3><p>Comptable, juriste, banquier, assureur, graphiste : quand vous avez besoin d’un professionnel, cherchez d’abord dans la communauté.</p></div>
   </div>
 </div></section>
 
-<section class="paper"><div class="wrap two">
-  <div><span class="label">Les pistes</span><h2 style="margin-top:16px">Des financements sans riba, ça existe.</h2><p class="muted" style="margin-top:18px">Ces solutions ne conviennent pas à tous les projets. C’est justement pour ça que nous les étudions avec vous, au cas par cas.</p></div>
-  <div class="faq">
-    <details open><summary>Prêts d’honneur à taux zéro</summary><p>Des prêts personnels sans intérêt et sans garantie, accordés au créateur d’entreprise par des réseaux d’accompagnement. Ils renforcent vos fonds propres et facilitent la suite du financement.</p></details>
-    <details><summary>Subventions et aides à la création</summary><p>Aides publiques, concours, dispositifs locaux pour les créateurs et repreneurs : pas de remboursement, donc pas d’intérêt. Nous vous aidons à repérer celles auxquelles vous avez droit.</p></details>
-    <details><summary>Apports en capital</summary><p>Des investisseurs, y compris des membres du réseau, entrent au capital de votre entreprise : ils partagent les gains comme les risques. C’est le principe de la moucharaka.</p></details>
-    <details><summary>Financement participatif</summary><p>Collecter auprès de nombreux contributeurs, en don (avec ou sans contrepartie) ou en capital. Un bon moyen aussi de tester votre marché.</p></details>
-    <details><summary>Contrats de finance islamique</summary><p>Mourabaha (achat-revente avec marge connue d’avance), ijara (location), moucharaka (association) : quand des établissements les proposent pour votre besoin, nous vous aidons à comparer.</p></details>
-  </div>
-</div></section>
-
-<section><div class="wrap">
+<section class="paper"><div class="wrap">
   <div class="head"><span class="label">Comment ça se passe</span><h2 style="margin-top:16px">Quatre étapes, à vos côtés.</h2></div>
   <ol class="steps" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
-    <li><h3>On fait le point</h3><p>Votre projet, votre besoin, vos apports. Sans jugement, entre nous.</p></li>
-    <li><h3>On structure</h3><p>Business plan et prévisionnel, avec l’aide des membres qui s’y connaissent.</p></li>
-    <li><h3>On oriente</h3><p>Vers le soutien du réseau ou les solutions sans intérêt les plus adaptées.</p></li>
-    <li><h3>On suit</h3><p>Le réseau reste à vos côtés après le lancement : clients, conseils, contacts.</p></li>
+    <li><h3>On fait le point</h3><p>Votre idée, votre situation, vos questions. Sans jugement, entre nous.</p></li>
+    <li><h3>On construit</h3><p>Le statut, les démarches, le projet, avec l’aide des membres qui s’y connaissent.</p></li>
+    <li><h3>On vous lance</h3><p>Ouverture, premiers clients, recommandations dans le réseau.</p></li>
+    <li><h3>On reste là</h3><p>Le réseau vous suit après le lancement : conseils, contacts, entraide.</p></li>
   </ol>
-  <p class="note" style="margin-top:40px">L’association n’est ni une banque ni un conseiller en investissement. Nous vous aidons à préparer votre projet et à vous orienter ; la décision de financement revient toujours aux organismes et aux personnes qui financent.</p>
+</div></section>
+
+<section><div class="wrap two">
+  <div><span class="label">Et pour les moyens ?</span><h2 style="margin-top:16px">Avancer selon nos valeurs.</h2></div>
+  <div class="prose">
+    <p>Quand un projet a besoin de moyens, nous pouvons aussi vous aider à chercher des solutions de financement qui respectent nos valeurs, c’est-à-dire sans intérêt.</p>
+    <p>À terme, nous aimerions qu’une entraide financière puisse naître au sein de la communauté, pour soutenir ceux qui se lancent. C’est un projet que nous construirons pas à pas, avec les membres.</p>
+    <p class="note" style="margin-top:24px">L’association n’est ni une banque ni un conseiller en investissement : nous vous aidons à préparer votre projet et à vous orienter.</p>
+  </div>
 </div></section>
 
 <section style="padding-top:0"><div class="wrap"><div class="final">
   <div><span class="label" style="color:var(--ink)">Vous avez un projet ?</span><h2 style="margin-top:16px">Parlons-en ensemble.</h2></div>
-  <div class="cta"><a class="btn btn-dark" href="${r}adherer/">Présenter mon projet ${I.arrow}</a></div>
+  <div class="cta"><a class="btn btn-dark" href="${r}adherer/">Être accompagné ${I.arrow}</a></div>
 </div></div></section>`,
 });
-out('financement/index.html', financement);
+out('accompagnement/index.html', accompagnement);
+// Ancienne adresse : redirection pour les liens déjà partagés
+out('financement/index.html', `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="robots" content="noindex"><meta http-equiv="refresh" content="0; url=../accompagnement/"><link rel="canonical" href="${C.BASE}/accompagnement/"><title>Accompagnement</title></head><body><a href="../accompagnement/">Accompagnement</a></body></html>`);
 
 // ---------- CAGNOTTE ----------
 const open = !!C.CAGNOTTE_URL;
@@ -509,7 +512,7 @@ const cagnotte = page({
   <div class="head split"><div><span class="label">Quels projets ?</span><h2 style="margin-top:16px">Ce que la cagnotte peut financer.</h2></div><p>Des exemples de ce que nous voulons rendre possible. Les vrais projets viendront des membres.</p></div>
   <div class="pillars">
     <div class="card reveal"><span class="icon">${I.build}</span><h3>Projets communautaires</h3><p>Des initiatives utiles à toute la communauté, ici à Toulouse ou au pays.</p></div>
-    <div class="card reveal"><span class="icon">${I.seed}</span><h3>Coups de pouce</h3><p>Aider un nouvel entrepreneur à franchir la première marche, sans intérêt.</p></div>
+    <div class="card reveal"><span class="icon">${I.seed}</span><h3>Coups de pouce</h3><p>Aider un nouvel entrepreneur à franchir la première marche.</p></div>
     <div class="card reveal"><span class="icon">${I.users}</span><h3>Vie du réseau</h3><p>Rencontres, ateliers, formations ouvertes aux membres.</p></div>
   </div>
   <div class="cta" style="margin-top:40px"><a class="btn btn-out" href="${r}adherer/">Proposer un projet</a></div>
@@ -606,7 +609,7 @@ out('projets/index.html', sectionPage({
     ['build', 'Projets communautaires', 'Des initiatives utiles à toute la communauté de Toulouse : événements culturels, entraide, accueil des nouveaux arrivants.'],
     ['users', 'Projets entre membres', 'Plusieurs membres s’associent pour une activité commune, en mettant chacun leur savoir-faire.'],
     ['heart', 'Projets au pays', 'Des actions qui relient la diaspora toulousaine aux Comores.'],
-    ['seed', 'Les moyens pour avancer', 'Cagnotte communautaire, financement sans intérêt, compétences des membres : le réseau aide à trouver les moyens de chaque projet.'],
+    ['seed', 'Les moyens pour avancer', 'Cagnotte communautaire, compétences des membres, accompagnement : le réseau aide à trouver les moyens de chaque projet.'],
   ],
   listLabel: 'Comment ça marche', listTitle: 'De l’idée au projet.', listIntro: 'Chaque projet est présenté aux membres avant d’être soutenu. Rien ne se décide sans la communauté.',
   list: [
