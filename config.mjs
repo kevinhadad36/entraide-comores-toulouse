@@ -12,10 +12,11 @@ export const CONFIG = {
   EMAIL:       env.EMAIL       || '',
   WHATSAPP:    env.WHATSAPP    || '33641478339',   // format international sans + ni espaces, ex. 33612345678
 
-  // Formulaire d'adhésion : URL d'envoi (Formspree, Web3Forms, Getform…).
-  // Vide = les réponses sont envoyées par WhatsApp (si WHATSAPP) ou par e-mail (si EMAIL).
-  FORM_ENDPOINT:   env.FORM_ENDPOINT   || '',
-  FORM_ACCESS_KEY: env.FORM_ACCESS_KEY || '',   // uniquement pour Web3Forms
+  // Formulaire d'inscription (/adherer/) → base Supabase (schéma : supabase/schema.sql).
+  // Supabase > Project Settings > API : « Project URL » et clé « anon public » (faite pour être publique).
+  // Vides = chaque inscription est envoyée sur le WhatsApp ci-dessus, pour ne rien perdre en attendant la base.
+  SUPABASE_URL:      env.SUPABASE_URL      || '',
+  SUPABASE_ANON_KEY: env.SUPABASE_ANON_KEY || '',
 
   // Cagnotte (HelloAsso conseillé). Vides = « ouverture prochaine ».
   CAGNOTTE_URL:     env.CAGNOTTE_URL     || '',  // lien de la page de don

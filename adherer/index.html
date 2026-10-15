@@ -1,12 +1,12 @@
 <!doctype html>
 <html lang="fr"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Adhérer · Réseau des entrepreneurs comoriens de Toulouse</title>
-<meta name="description" content="Rejoignez le réseau d’entraide des entrepreneurs comoriens de Toulouse. Formulaire d’adhésion en 2 minutes, gratuit et sans engagement.">
+<title>Rejoindre l’annuaire · Réseau des entrepreneurs comoriens de Toulouse</title>
+<meta name="description" content="Rejoignez l’annuaire de la communauté comorienne de Toulouse : faites connaître votre métier et trouvez quelqu’un de la communauté près de chez vous. 2 minutes, gratuit.">
 <link rel="canonical" href="https://kevinhadad36.github.io/entraide-comores-toulouse/adherer/">
 <meta property="og:type" content="website"><meta property="og:locale" content="fr_FR">
 <meta property="og:site_name" content="Réseau des entrepreneurs comoriens de Toulouse">
-<meta property="og:title" content="Adhérer · Réseau des entrepreneurs comoriens de Toulouse"><meta property="og:description" content="Rejoignez le réseau d’entraide des entrepreneurs comoriens de Toulouse. Formulaire d’adhésion en 2 minutes, gratuit et sans engagement.">
+<meta property="og:title" content="Rejoindre l’annuaire · Réseau des entrepreneurs comoriens de Toulouse"><meta property="og:description" content="Rejoignez l’annuaire de la communauté comorienne de Toulouse : faites connaître votre métier et trouvez quelqu’un de la communauté près de chez vous. 2 minutes, gratuit.">
 <meta property="og:url" content="https://kevinhadad36.github.io/entraide-comores-toulouse/adherer/"><meta property="og:image" content="https://kevinhadad36.github.io/entraide-comores-toulouse/assets/og.png">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
@@ -28,77 +28,105 @@
 <div class="wrap form-wrap">
   <div>
     <div class="sticky">
-      <span class="label">Formulaire d’adhésion</span>
-      <h1 style="font-size:clamp(2.4rem,6vw,3.5rem);margin:16px 0 18px;line-height:1">Rejoignez le réseau.</h1>
-      <p class="lead muted" style="font-size:1.125rem">Deux minutes pour vous présenter. Nous revenons vers vous rapidement pour faire connaissance.</p>
+      <span class="label">Inscription</span>
+      <h1 style="font-size:clamp(2.4rem,6vw,3.5rem);margin:16px 0 18px;line-height:1">On est nombreux à Toulouse. Faisons-nous connaître.</h1>
+      <p class="lead muted" style="font-size:1.125rem">Mécanicien, comptable, coiffeuse, étudiant, maman qui cuisine… La communauté a des talents partout, mais on ne se connaît pas. Ce formulaire construit l’annuaire de la communauté : demain, vous trouverez quelqu’un près de chez vous, et on pourra vous trouver aussi.</p>
       <ul class="aside-list">
-        <li><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span>2 minutes, 3 étapes</span></li>
-        <li><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Gratuit et sans engagement</span></li>
-        <li><svg viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg><span>Vos informations restent entre nous</span></li>
-        <li><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M16.5 14.6c2.6.2 4.4 1.9 5 5.4"/></svg><span>Ouvert aux entrepreneurs, porteurs de projet et soutiens</span></li>
+        <li><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span>Environ 2 minutes</span></li>
+        <li><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Gratuit, sans but commercial : le seul objectif est de tisser des liens</span></li>
+        <li><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M16.5 14.6c2.6.2 4.4 1.9 5 5.4"/></svg><span>Vous choisissez d’apparaître sous votre prénom ou de façon anonyme</span></li>
+        <li><svg viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg><span>Jamais publiés : votre âge, votre téléphone, votre e-mail, votre adresse</span></li>
       </ul>
       <p style="margin-top:28px"><a class="link" href="../">Découvrir le réseau d’abord</a></p>
     </div>
   </div>
 
   <div>
-  <form class="join" id="join" novalidate
-    data-endpoint="" data-whatsapp="33641478339" data-email="">
-    <div class="progress" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
-    
-    <input type="hidden" name="_subject" value="Nouvelle adhésion · Réseau Comores Toulouse">
-    <input type="hidden" name="source" value="">
-    <label class="hp" aria-hidden="true">Ne pas remplir <input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label>
+  <form class="join" id="inscription" novalidate
+    data-supabase-url="" data-supabase-key="" data-whatsapp="33641478339">
+    <div class="progress" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></div>
 
     <fieldset>
-      <legend><small>01</small>Vous</legend>
+      <legend><small>01</small>Qui êtes-vous ?</legend>
       <div class="fgrid c2">
-        <label class="field"><span>Prénom</span><input type="text" name="prenom" autocomplete="given-name" required></label>
-        <label class="field"><span>Nom</span><input type="text" name="nom" autocomplete="family-name" required></label>
-        <label class="field"><span>Téléphone <em>(WhatsApp de préférence)</em></span><input type="tel" name="telephone" autocomplete="tel" inputmode="tel" placeholder="06 12 34 56 78" required></label>
-        <label class="field"><span>E-mail <em>(facultatif)</em></span><input type="email" name="email" autocomplete="email" placeholder="vous@exemple.fr"></label>
-        <label class="field"><span>Ville</span><input type="text" name="ville" autocomplete="address-level2" placeholder="Toulouse, Blagnac, Colomiers…" required></label>
-        <label class="field"><span>Vous êtes…</span><select name="profil" required>
-          <option value="">Choisir</option><option>Entrepreneur / chef d’entreprise</option><option>Indépendant / artisan / auto-entrepreneur</option><option>Porteur de projet</option><option>Étudiant / jeune diplômé</option><option>Salarié, envie de soutenir le réseau</option><option>Autre</option>
-        </select></label>
+        <label class="field"><span>Prénom</span><input type="text" name="prenom" maxlength="80" autocomplete="given-name" required></label>
+        <label class="field"><span>Nom</span><input type="text" name="nom" maxlength="80" autocomplete="family-name" required></label>
+      </div>
+      <div class="field"><span class="group-title">Vous êtes</span><div class="opts"><label class="opt"><input type="radio" name="sexe" value="femme"><span>Une femme</span></label><label class="opt"><input type="radio" name="sexe" value="homme"><span>Un homme</span></label></div></div>
+      <div class="field">
+        <span class="group-title">Naissance</span>
+        <div class="opts"><label class="opt"><input type="radio" name="naiss_mode" value="date" checked><span>Je donne ma date</span></label><label class="opt"><input type="radio" name="naiss_mode" value="annee"><span>Seulement l’année</span></label></div>
+        <div class="naiss">
+          <input type="date" name="date_naissance" aria-label="Date de naissance">
+          <input type="number" name="annee_naissance" aria-label="Année de naissance" placeholder="ex. 1990" min="1920" inputmode="numeric" hidden>
+          <output id="age-preview"></output>
+        </div>
+        <span class="hint">Sert uniquement aux statistiques de la communauté. Votre âge se met à jour tout seul et n’est jamais affiché.</span>
       </div>
     </fieldset>
 
     <fieldset>
-      <legend><small>02</small>Votre activité</legend>
+      <legend><small>02</small>Où êtes-vous ?</legend>
       <div class="fgrid c2">
-        <label class="field"><span>Nom de l’entreprise ou du projet <em>(facultatif)</em></span><input type="text" name="entreprise" autocomplete="organization"></label>
-        <label class="field"><span>Secteur</span><select name="secteur">
-          <option value="">Choisir</option><option>Bâtiment &amp; travaux</option><option>Restauration &amp; traiteur</option><option>Commerce</option><option>Transport &amp; logistique</option><option>Beauté &amp; bien-être</option><option>Santé</option><option>Numérique &amp; tech</option><option>Conseil, gestion, comptabilité</option><option>Immobilier</option><option>Éducation &amp; formation</option><option>Événementiel</option><option>Import-export</option><option>Services à la personne</option><option>Autre</option>
-        </select></label>
+        <label class="field"><span>Commune</span>
+          <span class="combo"><input type="text" name="commune" required autocomplete="off" placeholder="Toulouse, Blagnac, Colomiers…" aria-autocomplete="list" aria-controls="commune-list"><ul id="commune-list" role="listbox" hidden></ul></span>
+        </label>
+        <label class="field"><span>Quartier <em>(facultatif)</em></span><input type="text" name="quartier" maxlength="80" placeholder="Mirail, Bagatelle, Empalot…"></label>
       </div>
-      <label class="field"><span>En deux mots, que faites-vous ? <em>(ou que voulez-vous lancer ?)</em></span><textarea name="activite" placeholder="Ex. : je suis plombier à mon compte depuis 3 ans…"></textarea></label>
+      <span class="hint" style="margin-top:-6px">Sur la future carte, vous serez placé au centre de votre commune, jamais à votre adresse.</span>
+      <div class="field"><span class="group-title">Jusqu’où pouvez-vous vous déplacer pour rendre service ?</span>
+        <div class="opts"><label class="opt"><input type="radio" name="rayon_km" value="0"><span>Pas de déplacement</span></label><label class="opt"><input type="radio" name="rayon_km" value="5"><span>5 km</span></label><label class="opt"><input type="radio" name="rayon_km" value="10" checked><span>10 km</span></label><label class="opt"><input type="radio" name="rayon_km" value="20"><span>20 km</span></label><label class="opt"><input type="radio" name="rayon_km" value="50"><span>Toute la région</span></label></div>
+      </div>
     </fieldset>
 
     <fieldset>
-      <legend><small>03</small>Entraide</legend>
-      <div class="field"><span class="group-title">Ce que vous pouvez apporter <em>(plusieurs choix)</em></span><div class="opts"><label class="opt"><input type="checkbox" name="apports" value="Mes services / produits"><span>Mes services / produits</span></label><label class="opt"><input type="checkbox" name="apports" value="Des conseils dans mon domaine"><span>Des conseils dans mon domaine</span></label><label class="opt"><input type="checkbox" name="apports" value="Du temps bénévole"><span>Du temps bénévole</span></label><label class="opt"><input type="checkbox" name="apports" value="Mon réseau de contacts"><span>Mon réseau de contacts</span></label><label class="opt"><input type="checkbox" name="apports" value="Un soutien financier aux projets"><span>Un soutien financier aux projets</span></label><label class="opt"><input type="checkbox" name="apports" value="Animer un atelier"><span>Animer un atelier</span></label></div></div>
-      <div class="field"><span class="group-title">Ce que vous cherchez <em>(plusieurs choix)</em></span><div class="opts"><label class="opt"><input type="checkbox" name="besoins" value="Des clients"><span>Des clients</span></label><label class="opt"><input type="checkbox" name="besoins" value="Des partenaires"><span>Des partenaires</span></label><label class="opt"><input type="checkbox" name="besoins" value="Des conseils"><span>Des conseils</span></label><label class="opt"><input type="checkbox" name="besoins" value="Un financement halal"><span>Un financement halal</span></label><label class="opt"><input type="checkbox" name="besoins" value="Un mentor"><span>Un mentor</span></label><label class="opt"><input type="checkbox" name="besoins" value="Des infos sur les démarches"><span>Des infos sur les démarches</span></label><label class="opt"><input type="checkbox" name="besoins" value="Rencontrer du monde"><span>Rencontrer du monde</span></label></div></div>
-      <label class="field"><span>Une idée de nom pour l’association ? <em>(facultatif, on vote ensemble)</em></span><input type="text" name="idee_nom"></label>
-      <label class="field"><span>Un message, une idée de projet ? <em>(facultatif)</em></span><textarea name="message"></textarea></label>
+      <legend><small>03</small>Ce que vous faites</legend>
+      <div class="fgrid c2">
+        <label class="field"><span>Domaine</span><select name="domaine" required><option value="">Choisir</option><option value="batiment">Bâtiment, travaux, plomberie, électricité</option><option value="auto">Mécanique, automobile, transport</option><option value="cuisine">Cuisine, traiteur, plats faits maison</option><option value="beaute">Coiffure, beauté, couture</option><option value="sante">Santé, aide à la personne</option><option value="education">Enseignement, soutien scolaire, garde d’enfants</option><option value="compta">Comptabilité, banque, finance, assurance</option><option value="juridique">Juridique, administratif, démarches</option><option value="informatique">Informatique, numérique, développement</option><option value="image">Graphisme, photo, vidéo, communication</option><option value="commerce">Commerce, vente, import-export</option><option value="evenementiel">Événementiel, musique, animation</option><option value="immobilier">Immobilier, logement</option><option value="tourisme">Tourisme, hôtellerie, restauration</option><option value="sport">Sport, coaching</option><option value="autre">Autre</option></select></label>
+        <label class="field"><span>Votre métier ou ce que vous savez faire</span><input type="text" name="metier" maxlength="120" required placeholder="ex. Mécanicien auto, comptable…"></label>
+      </div>
+      <div class="field"><span class="group-title">Situation</span>
+        <div class="opts"><label class="opt"><input type="radio" name="situation" value="salarie"><span>Salarié·e</span></label><label class="opt"><input type="radio" name="situation" value="independant"><span>À mon compte</span></label><label class="opt"><input type="radio" name="situation" value="etudiant"><span>Étudiant·e</span></label><label class="opt"><input type="radio" name="situation" value="recherche"><span>En recherche</span></label><label class="opt"><input type="radio" name="situation" value="retraite"><span>Retraité·e</span></label><label class="opt"><input type="radio" name="situation" value="autre"><span>Autre</span></label></div>
+      </div>
+      <label class="check"><input type="checkbox" name="cherche_stage"><span>Je cherche un <b>stage, une alternance ou un emploi</b> : la communauté peut m’aider.</span></label>
+      <label class="field"><span>Quelques mots <em>(facultatif)</em></span><textarea name="description" maxlength="600" placeholder="Ce que vous proposez, vos disponibilités, ce que vous cherchez…"></textarea><span class="hint"><span id="desc-count">0</span>/600</span></label>
     </fieldset>
 
-    <div style="display:grid;gap:14px">
-      <label class="check"><input type="checkbox" name="annuaire" value="oui"><span>J’accepte que mon nom, mon activité et mon contact professionnel apparaissent dans l’annuaire des membres (après validation avec moi).</span></label>
-      <label class="check"><input type="checkbox" name="consentement" value="oui" required><span>J’accepte que mes informations soient utilisées par l’association pour me recontacter et gérer mon adhésion. Elles ne sont jamais revendues. <a class="link" href="../mentions-legales/">En savoir plus</a></span></label>
-    </div>
+    <fieldset>
+      <legend><small>04</small>Comment vous joindre</legend>
+      <span class="hint" style="margin-top:-8px">Jamais publié. L’équipe s’en sert pour vous mettre en relation quand quelqu’un vous cherche. Au moins un des deux.</span>
+      <div class="fgrid c2">
+        <label class="field"><span>Téléphone</span><input type="tel" name="telephone" autocomplete="tel" inputmode="tel" placeholder="06 12 34 56 78"></label>
+        <label class="field"><span>E-mail</span><input type="email" name="email" autocomplete="email" placeholder="vous@exemple.fr"></label>
+      </div>
+      <label class="check"><input type="checkbox" name="whatsapp" checked><span>Ce numéro est joignable sur WhatsApp</span></label>
+    </fieldset>
 
-    <div class="form-msg" id="form-msg" role="alert" hidden></div>
+    <fieldset>
+      <legend><small>05</small>Comment apparaître</legend>
+      <div class="choices" role="radiogroup" aria-label="Visibilité">
+        <label class="choice"><input type="radio" name="visibilite" value="public"><b>Sous mon prénom</b><small>Affiché « <i id="preview-nom">Prénom N.</i> » avec votre métier et votre commune.</small></label>
+        <label class="choice"><input type="radio" name="visibilite" value="anonyme"><b>De façon anonyme</b><small>Seuls votre métier et votre commune apparaissent. On vous contacte via l’équipe.</small></label>
+      </div>
+      <label class="check"><input type="checkbox" name="consentement" required><span>J’accepte que ces informations soient enregistrées pour l’annuaire de la communauté et affichées selon mon choix ci-dessus. Je peux demander à tout moment leur modification ou leur suppression. <a class="link" href="../mentions-legales/">En savoir plus</a></span></label>
+    </fieldset>
+
+    <div class="form-msg err" id="form-error" role="alert" hidden></div>
     <div class="form-foot">
-      <p>Gratuit, sans engagement. Les modalités de cotisation seront présentées à la création officielle de l’association.</p>
-      <button class="btn btn-hl" type="submit">Envoyer mon adhésion <svg viewBox="0 0 16 16"><path d="M2 8h12M9 3l5 5-5 5"/></svg></button>
+      <p>Gratuit, sans engagement. Votre fiche est vérifiée par l’équipe avant d’être mise en ligne.</p>
+      <button class="btn btn-hl" type="submit">Rejoindre l’annuaire <svg viewBox="0 0 16 16"><path d="M2 8h12M9 3l5 5-5 5"/></svg></button>
     </div>
   </form>
 
   <div class="done" id="done" tabindex="-1">
     <div class="big"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
-    <h2>Bienvenue dans le réseau.</h2>
-    <p class="muted">Merci ! Nous avons bien reçu votre demande et nous revenons vers vous très vite. En attendant, partagez le formulaire autour de vous : plus nous serons nombreux, plus le réseau sera utile à chacun.</p>
+    <h2>Merci, <span id="merci-prenom"></span> !</h2>
+    <p class="muted" id="merci-texte">Votre fiche est enregistrée. L’équipe la vérifie avant de la mettre en ligne.</p>
+    <div class="token" id="token" hidden>
+      <p><b>Gardez ce code</b> : il vous permettra de modifier ou supprimer votre fiche plus tard.</p>
+      <code id="jeton"></code><button type="button" class="btn btn-out" id="copy-jeton">Copier</button>
+    </div>
+    <p class="muted">Faites tourner le lien autour de vous : plus on est nombreux, plus l’annuaire est utile.</p>
     <div class="cta"><a class="btn btn-hl" id="wa-share" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M4 19.5l1.3-3.8A8 8 0 1 1 8.4 19z"/></svg> Partager sur WhatsApp</a><a class="btn btn-out" href="../">Découvrir le réseau</a></div>
   </div>
   </div>
@@ -107,10 +135,11 @@
 <footer><div class="wrap">
 <div class="foot">
 <div><a class="brand" href="../"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#1f6b3a"/><mask id="lg"><rect width="32" height="32" fill="#fff"/><circle cx="19" cy="16" r="8.4" fill="#000"/></mask><circle cx="15" cy="16" r="10" fill="#fff" mask="url(#lg)"/><g fill="#fff"><polygon points="20.60,8.05 21.01,9.04 22.07,9.12 21.26,9.82 21.51,10.85 20.60,10.30 19.69,10.85 19.94,9.82 19.13,9.12 20.19,9.04"/><polygon points="22.30,12.35 22.71,13.34 23.77,13.42 22.96,14.12 23.21,15.15 22.30,14.60 21.39,15.15 21.64,14.12 20.83,13.42 21.89,13.34"/><polygon points="22.30,16.55 22.71,17.54 23.77,17.62 22.96,18.32 23.21,19.35 22.30,18.80 21.39,19.35 21.64,18.32 20.83,17.62 21.89,17.54"/><polygon points="20.60,20.85 21.01,21.84 22.07,21.92 21.26,22.62 21.51,23.65 20.60,23.10 19.69,23.65 19.94,22.62 19.13,21.92 20.19,21.84"/></g></svg><span>Réseau Comores Toulouse<small>Entraide · Toulouse</small></span></a><p style="margin-top:18px;max-width:38ch">Réseau des entrepreneurs comoriens de Toulouse : entraide, réseau et financement éthique entre entrepreneurs de la communauté comorienne.</p></div>
-<div><h4>Le réseau</h4><ul><li><a href="../">Le réseau</a></li><li><a href="../annuaire/">Annuaire</a></li><li><a href="../financement/">Financement</a></li><li><a href="../cagnotte/">Cagnotte</a></li><li><a href="../adherer/">Adhérer</a></li></ul></div>
+<div><h4>Le réseau</h4><ul><li><a href="../">Accueil</a></li><li><a href="../reseautage/">Réseautage</a></li><li><a href="../annuaire/">Annuaire</a></li><li><a href="../competences/">Compétences</a></li><li><a href="../projets/">Projets</a></li><li><a href="../financement/">Financement</a></li><li><a href="../cagnotte/">Cagnotte</a></li><li><a href="../blog/">Blog</a></li><li><a href="../adherer/">Adhérer</a></li></ul></div>
 <div><h4>Contact</h4><ul><li><a href="https://wa.me/33641478339">WhatsApp</a></li><li><a href="../adherer/">Formulaire d’adhésion</a></li><li><a href="../mentions-legales/">Mentions légales</a></li></ul></div>
 </div>
 <div class="foot-bottom"><span>Association en cours de création · Toulouse, Occitanie</span><span>Karibu.</span></div>
 </div></footer>
 <script src="../assets/app.js" defer></script>
+<script src="../assets/inscription.js" defer></script>
 </body></html>

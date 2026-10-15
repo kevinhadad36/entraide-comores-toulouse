@@ -7,11 +7,17 @@ Déployé sur GitHub Pages : https://kevinhadad36.github.io/entraide-comores-tou
 - Logo : croissant + 4 étoiles (généré dans build.mjs).
 - Règles : aucun chiffre, membre, témoignage, montant ou partenaire inventé. Voix « nous », ton chaleureux.
 
+## Structure (fusion du 15/10/2026, demandée par Kevin)
+- Chaque pilier a sa propre page, le menu y mène ; l'accueil garde tous les résumés : `reseautage/`, `annuaire/`, `competences/`, `projets/`, `financement/`, `cagnotte/`, `blog/`.
+- Le bouton « Adhérer » mène à `/adherer/` = le **formulaire d'inscription à l'annuaire** (ex-dépôt inscription-comoriens-toulouse, qui redirige désormais ici). Lien direct à partager : `/adherer/?src=whatsapp`.
+- Blog : articles dans `articles.mjs` (3 derniers en bas de l'accueil, une page par article). Journée culturelle : article « À venir », détails à fournir par Kevin.
+- Sources des vocaux du projet : voir `../comoriens-toulouse/CLAUDE.md` (hors dépôt).
+
 ## Build
-Ne pas éditer les .html à la main. Source : `build.mjs`, `config.mjs`, `members.json`, `assets/style.css`, `assets/app.js`.
+Ne pas éditer les .html à la main. Source : `build.mjs`, `config.mjs`, `articles.mjs`, `members.json`, `assets/style.css`, `assets/app.js`, `assets/inscription.js`.
 - `node build.mjs`
-- Page formulaire dédiée : `/adherer/` (version épurée, sans menu, pour le lien WhatsApp ; ajouter `?src=whatsapp` au lien partagé).
-- Formulaire : `FORM_ENDPOINT` (Formspree/Web3Forms…) ; sinon repli sur WhatsApp (`WHATSAPP`) ou e-mail (`EMAIL`).
+- Formulaire `/adherer/` : envoi vers Supabase (`SUPABASE_URL` + `SUPABASE_ANON_KEY`, schéma `supabase/schema.sql`) ; tant que c'est vide, chaque inscription part en message WhatsApp pré-rempli vers `WHATSAPP`.
+- Liste des domaines : `DOMAINES` dans build.mjs, à garder alignée avec la table `domaines` du schéma.
 - Cagnotte : `CAGNOTTE_URL` (HelloAsso), `CAGNOTTE_WIDGET`, `CAGNOTTE_PROJECT`, `CAGNOTTE_TEXT`, `CAGNOTTE_GOAL`, `CAGNOTTE_RAISED`.
 - Annuaire : ajouter les membres (avec leur accord) dans `members.json` :
   `{"nom":"", "entreprise":"", "activite":"", "secteur":"", "ville":"", "description":"", "telephone":"", "whatsapp":"336…", "email":"", "site":""}`

@@ -1,9 +1,11 @@
-// Génère le site : index.html, adherer/, annuaire/, financement/, cagnotte/, mentions-legales/, sitemap.xml, robots.txt.
-// Usage : node build.mjs   (réglages dans config.mjs ; membres de l'annuaire dans members.json)
+// Génère le site : index.html, une page par section (reseautage/, annuaire/, competences/, projets/, financement/, cagnotte/),
+// blog/ (+ un dossier par article), adherer/ (formulaire d'inscription), mentions-legales/, sitemap.xml, robots.txt.
+// Usage : node build.mjs   (réglages dans config.mjs ; membres dans members.json ; articles dans articles.mjs)
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { CONFIG as C } from './config.mjs';
+import { ARTICLES } from './articles.mjs';
 
 const DIR = path.dirname(fileURLToPath(import.meta.url));
 const out = (p, s) => { const f = path.join(DIR, p); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, s); };
@@ -43,15 +45,17 @@ const I = {
 
 // ---------- gabarit commun ----------
 const NAV = [
-  ['', 'Le réseau'], ['annuaire/', 'Annuaire'], ['financement/', 'Financement'], ['cagnotte/', 'Cagnotte'],
+  ['reseautage/', 'Réseautage'], ['annuaire/', 'Annuaire'], ['competences/', 'Compétences'], ['projets/', 'Projets'],
+  ['financement/', 'Financement'], ['cagnotte/', 'Cagnotte'], ['blog/', 'Blog'],
 ];
 const analytics = C.UMAMI_ID ? `<script defer src="https://cloud.umami.is/script.js" data-website-id="${C.UMAMI_ID}"></script>` : '';
 
-function page({ slug = '', title, desc, body, minimal = false }) {
+function page({ slug = '', title, desc, body, minimal = false, scripts = [], ogType = 'website' }) {
   const root = slug ? '../'.repeat(slug.split('/').filter(Boolean).length) : '';
   const url = `${C.BASE}/${slug}`;
-  const nav = NAV.map(([h, l]) => `<li><a href="${root}${h}"${h === slug ? ' aria-current="page"' : ''}>${l}</a></li>`).join('');
-  const drawer = NAV.map(([h, l]) => `<a href="${root}${h}">${l}</a>`).join('') + `<a href="${root}adherer/">Adhérer au réseau</a>`;
+  const current = h => h && slug.startsWith(h) ? ' aria-current="page"' : '';
+  const nav = NAV.map(([h, l]) => `<li><a href="${root}${h}"${current(h)}>${l}</a></li>`).join('');
+  const drawer = `<a href="${root || './'}">Accueil</a>` + NAV.map(([h, l]) => `<a href="${root}${h}">${l}</a>`).join('') + `<a href="${root}adherer/">Adhérer au réseau</a>`;
   const brand = `<a class="brand" href="${root || './'}">${LOGO('lg')}<span>${esc(C.SHORT)}<small>Entraide · Toulouse</small></span></a>`;
   return `<!doctype html>
 <html lang="fr"><head>
@@ -59,7 +63,7 @@ function page({ slug = '', title, desc, body, minimal = false }) {
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
 <link rel="canonical" href="${url}">
-<meta property="og:type" content="website"><meta property="og:locale" content="fr_FR">
+<meta property="og:type" content="${ogType}"><meta property="og:locale" content="fr_FR">
 <meta property="og:site_name" content="${esc(C.NAME)}">
 <meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(desc)}">
 <meta property="og:url" content="${url}"><meta property="og:image" content="${C.BASE}/assets/og.png">
@@ -86,21 +90,21 @@ ${body(root)}
 <footer><div class="wrap">
 <div class="foot">
 <div>${brand}<p style="margin-top:18px;max-width:38ch">${esc(C.NAME)} : entraide, réseau et financement éthique entre entrepreneurs de la communauté comorienne.</p></div>
-<div><h4>Le réseau</h4><ul>${NAV.map(([h, l]) => `<li><a href="${root}${h}">${l}</a></li>`).join('')}<li><a href="${root}adherer/">Adhérer</a></li></ul></div>
+<div><h4>Le réseau</h4><ul><li><a href="${root || './'}">Accueil</a></li>${NAV.map(([h, l]) => `<li><a href="${root}${h}">${l}</a></li>`).join('')}<li><a href="${root}adherer/">Adhérer</a></li></ul></div>
 <div><h4>Contact</h4><ul>${C.WHATSAPP ? `<li><a href="https://wa.me/${C.WHATSAPP}">WhatsApp</a></li>` : ''}${C.EMAIL ? `<li><a href="mailto:${C.EMAIL}">${esc(C.EMAIL)}</a></li>` : ''}<li><a href="${root}adherer/">Formulaire d’adhésion</a></li><li><a href="${root}mentions-legales/">Mentions légales</a></li></ul></div>
 </div>
 <div class="foot-bottom"><span>Association en cours de création · Toulouse, Occitanie</span><span>Karibu.</span></div>
 </div></footer>
-<script src="${root}assets/app.js" defer></script>
+<script src="${root}assets/app.js" defer></script>${scripts.map(s => `\n<script src="${root}assets/${s}" defer></script>`).join('')}
 </body></html>`;
 }
 
 // ---------- ACCUEIL ----------
 const PILLARS = [
-  { n: '01', ic: 'users', t: 'Se rencontrer', d: 'Des rencontres régulières entre membres, des mises en relation ciblées, un carnet d’adresses qui grandit à chaque nouvel adhérent.', wide: true },
+  { n: '01', ic: 'users', t: 'Se rencontrer', d: 'Des rencontres régulières entre membres, des mises en relation ciblées, un carnet d’adresses qui grandit à chaque nouvel adhérent.', href: 'reseautage/', more: 'Le réseautage', wide: true },
   { n: '02', ic: 'search', t: 'Se trouver', d: 'Un plombier, un comptable, un traiteur, un développeur ? Avant d’aller chercher ailleurs, cherchez chez nous : l’annuaire des membres est fait pour ça.', href: 'annuaire/', more: 'Ouvrir l’annuaire', wide: true },
-  { n: '03', ic: 'share', t: 'Partager', d: 'Compétences, bons plans, démarches administratives, retours d’expérience : ce que l’un a appris, tout le monde en profite.' },
-  { n: '04', ic: 'build', t: 'Bâtir', d: 'Des projets d’envergure, communautaires ou non, que personne ne porterait seul. Nous mettons en commun les moyens et les savoir-faire.' },
+  { n: '03', ic: 'share', t: 'Partager', d: 'Compétences, bons plans, démarches administratives, retours d’expérience : ce que l’un a appris, tout le monde en profite.', href: 'competences/', more: 'Le partage de compétences' },
+  { n: '04', ic: 'build', t: 'Bâtir', d: 'Des projets d’envergure, communautaires ou non, que personne ne porterait seul. Nous mettons en commun les moyens et les savoir-faire.', href: 'projets/', more: 'Les projets' },
   { n: '05', ic: 'seed', t: 'Financer', d: 'Soutenir les nouveaux entrepreneurs de la diaspora : un coup de pouce de l’association ou un accompagnement vers des financements halal.', href: 'financement/', more: 'Le volet financement', hl: true },
 ];
 const FAQ = [
@@ -109,8 +113,15 @@ const FAQ = [
   ['L’adhésion est-elle payante ?', 'Le formulaire est gratuit et ne vous engage à rien. Les modalités de cotisation seront fixées collectivement lors de la création officielle de l’association, et communiquées à tous les inscrits.'],
   ['Faut-il habiter Toulouse ?', 'Les rencontres ont lieu à Toulouse et autour. Le volet financement et accompagnement peut s’ouvrir plus largement à la diaspora en France : inscrivez-vous en précisant votre ville.'],
   ['Qu’entendez-vous par « financement halal » ?', 'Un financement sans intérêt (sans riba), qui ne repose pas sur la spéculation et qui partage le risque plutôt que de le faire porter au seul emprunteur. Concrètement : prêts à taux zéro, apports en capital, financement participatif, contrats de finance islamique quand ils sont disponibles.'],
-  ['Qui voit mes informations ?', 'Seuls les responsables du réseau. Vous n’apparaissez dans l’annuaire public que si vous cochez la case prévue, et vous pouvez demander à tout moment la modification ou la suppression de vos données.'],
+  ['Qui voit mes informations ?', 'Votre âge, votre téléphone, votre e-mail et votre adresse ne sont jamais publiés. Dans l’annuaire, vous choisissez d’apparaître sous votre prénom ou de façon anonyme, et vous pouvez demander à tout moment la modification ou la suppression de vos données.'],
 ];
+
+// ---------- blog : carte d'article réutilisée sur l'accueil et sur /blog/ ----------
+const dateFr = d => new Date(d + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+const postCard = (a, r) => `<a class="card post reveal" href="${r}blog/${a.slug}/">
+  <div class="post-meta"><span class="tag${a.aVenir ? ' soon' : ''}">${esc(a.aVenir ? 'À venir' : a.categorie)}</span><time datetime="${a.date}">${dateFr(a.date)}</time></div>
+  <h3>${esc(a.titre)}</h3><p>${esc(a.resume)}</p><span class="more">Lire l’article ${I.arrow}</span>
+</a>`;
 
 const home = page({
   title: `${C.NAME} · Entraide, réseau et financement halal`,
@@ -142,8 +153,8 @@ const home = page({
 </div></div>
 
 <div class="ticker on-dark"><div class="wrap"><ul>
-  <li><span>01</span>Réseautage</li><li><span>02</span>Annuaire des membres</li><li><span>03</span>Partage de compétences</li>
-  <li><span>04</span>Projets d’envergure</li><li><span>05</span>Financement halal</li><li><span>06</span>Cagnotte communautaire</li>
+  ${[['reseautage/', 'Réseautage'], ['annuaire/', 'Annuaire des membres'], ['competences/', 'Partage de compétences'], ['projets/', 'Projets d’envergure'], ['financement/', 'Financement halal'], ['cagnotte/', 'Cagnotte communautaire']]
+    .map(([h, l], i) => `<li><a href="${r}${h}"><span>0${i + 1}</span>${l}</a></li>`).join('')}
 </ul></div></div>
 
 <section><div class="wrap manifesto-grid">
@@ -216,7 +227,13 @@ const home = page({
   <div class="faq">${FAQ.map(([q, a]) => `<details><summary>${q}</summary><p>${a}</p></details>`).join('')}</div>
 </div></section>
 
-<section><div class="wrap">
+<section id="blog"><div class="wrap">
+  <div class="head split"><div><span class="label">Le blog</span><h2 style="margin-top:16px">Les nouvelles de la communauté.</h2></div><p>Événements, initiatives et vie de la communauté comorienne de Toulouse.</p></div>
+  <div class="posts">${ARTICLES.slice(0, 3).map(a => postCard(a, r)).join('')}</div>
+  <div class="cta" style="margin-top:32px"><a class="btn btn-out" href="${r}blog/">Tous les articles</a></div>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
   <div class="final reveal">
     <div><span class="label" style="color:var(--ink)">Membres fondateurs</span><h2 style="margin-top:16px">Le réseau commence maintenant. Soyez des premiers.</h2></div>
     <div class="cta"><a class="btn btn-dark" href="${r}adherer/">Adhérer au réseau ${I.arrow}</a></div>
@@ -225,91 +242,127 @@ const home = page({
 });
 out('index.html', home);
 
-// ---------- ADHÉRER (page dédiée, partagée par WhatsApp) ----------
-const opt = (name, v, type = 'checkbox') => `<label class="opt"><input type="${type}" name="${name}" value="${esc(v)}"><span>${esc(v)}</span></label>`;
-const SECTEURS = ['Bâtiment & travaux', 'Restauration & traiteur', 'Commerce', 'Transport & logistique', 'Beauté & bien-être', 'Santé', 'Numérique & tech', 'Conseil, gestion, comptabilité', 'Immobilier', 'Éducation & formation', 'Événementiel', 'Import-export', 'Services à la personne', 'Autre'];
-const APPORTS = ['Mes services / produits', 'Des conseils dans mon domaine', 'Du temps bénévole', 'Mon réseau de contacts', 'Un soutien financier aux projets', 'Animer un atelier'];
-const BESOINS = ['Des clients', 'Des partenaires', 'Des conseils', 'Un financement halal', 'Un mentor', 'Des infos sur les démarches', 'Rencontrer du monde'];
+// ---------- ADHÉRER : formulaire d'inscription à l'annuaire (page épurée, partagée par WhatsApp) ----------
+// Domaines : garder aligné avec la table `domaines` de supabase/schema.sql
+const DOMAINES = [
+  ['batiment', 'Bâtiment, travaux, plomberie, électricité'], ['auto', 'Mécanique, automobile, transport'],
+  ['cuisine', 'Cuisine, traiteur, plats faits maison'], ['beaute', 'Coiffure, beauté, couture'],
+  ['sante', 'Santé, aide à la personne'], ['education', 'Enseignement, soutien scolaire, garde d’enfants'],
+  ['compta', 'Comptabilité, banque, finance, assurance'], ['juridique', 'Juridique, administratif, démarches'],
+  ['informatique', 'Informatique, numérique, développement'], ['image', 'Graphisme, photo, vidéo, communication'],
+  ['commerce', 'Commerce, vente, import-export'], ['evenementiel', 'Événementiel, musique, animation'],
+  ['immobilier', 'Immobilier, logement'], ['tourisme', 'Tourisme, hôtellerie, restauration'],
+  ['sport', 'Sport, coaching'], ['autre', 'Autre'],
+];
+const radio = (name, v, l, checked = false) => `<label class="opt"><input type="radio" name="${name}" value="${v}"${checked ? ' checked' : ''}><span>${l}</span></label>`;
 
 const adherer = page({
-  slug: 'adherer/', minimal: true,
-  title: `Adhérer · ${C.NAME}`,
-  desc: 'Rejoignez le réseau d’entraide des entrepreneurs comoriens de Toulouse. Formulaire d’adhésion en 2 minutes, gratuit et sans engagement.',
+  slug: 'adherer/', minimal: true, scripts: ['inscription.js'],
+  title: `Rejoindre l’annuaire · ${C.NAME}`,
+  desc: 'Rejoignez l’annuaire de la communauté comorienne de Toulouse : faites connaître votre métier et trouvez quelqu’un de la communauté près de chez vous. 2 minutes, gratuit.',
   body: r => `
 <div class="wrap form-wrap">
   <div>
     <div class="sticky">
-      <span class="label">Formulaire d’adhésion</span>
-      <h1 style="font-size:clamp(2.4rem,6vw,3.5rem);margin:16px 0 18px;line-height:1">Rejoignez le réseau.</h1>
-      <p class="lead muted" style="font-size:1.125rem">Deux minutes pour vous présenter. Nous revenons vers vous rapidement pour faire connaissance.</p>
+      <span class="label">Inscription</span>
+      <h1 style="font-size:clamp(2.4rem,6vw,3.5rem);margin:16px 0 18px;line-height:1">On est nombreux à Toulouse. Faisons-nous connaître.</h1>
+      <p class="lead muted" style="font-size:1.125rem">Mécanicien, comptable, coiffeuse, étudiant, maman qui cuisine… La communauté a des talents partout, mais on ne se connaît pas. Ce formulaire construit l’annuaire de la communauté : demain, vous trouverez quelqu’un près de chez vous, et on pourra vous trouver aussi.</p>
       <ul class="aside-list">
-        <li>${I.clock}<span>2 minutes, 3 étapes</span></li>
-        <li>${I.check}<span>Gratuit et sans engagement</span></li>
-        <li>${I.lock}<span>Vos informations restent entre nous</span></li>
-        <li>${I.users}<span>Ouvert aux entrepreneurs, porteurs de projet et soutiens</span></li>
+        <li>${I.clock}<span>Environ 2 minutes</span></li>
+        <li>${I.check}<span>Gratuit, sans but commercial : le seul objectif est de tisser des liens</span></li>
+        <li>${I.users}<span>Vous choisissez d’apparaître sous votre prénom ou de façon anonyme</span></li>
+        <li>${I.lock}<span>Jamais publiés : votre âge, votre téléphone, votre e-mail, votre adresse</span></li>
       </ul>
       <p style="margin-top:28px"><a class="link" href="${r}">Découvrir le réseau d’abord</a></p>
     </div>
   </div>
 
   <div>
-  <form class="join" id="join" novalidate
-    data-endpoint="${esc(C.FORM_ENDPOINT)}" data-whatsapp="${esc(C.WHATSAPP)}" data-email="${esc(C.EMAIL)}">
-    <div class="progress" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
-    ${C.FORM_ACCESS_KEY ? `<input type="hidden" name="access_key" value="${esc(C.FORM_ACCESS_KEY)}">` : ''}
-    <input type="hidden" name="_subject" value="Nouvelle adhésion · ${esc(C.SHORT)}">
-    <input type="hidden" name="source" value="">
-    <label class="hp" aria-hidden="true">Ne pas remplir <input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label>
+  <form class="join" id="inscription" novalidate
+    data-supabase-url="${esc(C.SUPABASE_URL)}" data-supabase-key="${esc(C.SUPABASE_ANON_KEY)}" data-whatsapp="${esc(C.WHATSAPP)}">
+    <div class="progress" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></div>
 
     <fieldset>
-      <legend><small>01</small>Vous</legend>
+      <legend><small>01</small>Qui êtes-vous ?</legend>
       <div class="fgrid c2">
-        <label class="field"><span>Prénom</span><input type="text" name="prenom" autocomplete="given-name" required></label>
-        <label class="field"><span>Nom</span><input type="text" name="nom" autocomplete="family-name" required></label>
-        <label class="field"><span>Téléphone <em>(WhatsApp de préférence)</em></span><input type="tel" name="telephone" autocomplete="tel" inputmode="tel" placeholder="06 12 34 56 78" required></label>
-        <label class="field"><span>E-mail <em>(facultatif)</em></span><input type="email" name="email" autocomplete="email" placeholder="vous@exemple.fr"></label>
-        <label class="field"><span>Ville</span><input type="text" name="ville" autocomplete="address-level2" placeholder="Toulouse, Blagnac, Colomiers…" required></label>
-        <label class="field"><span>Vous êtes…</span><select name="profil" required>
-          <option value="">Choisir</option><option>Entrepreneur / chef d’entreprise</option><option>Indépendant / artisan / auto-entrepreneur</option><option>Porteur de projet</option><option>Étudiant / jeune diplômé</option><option>Salarié, envie de soutenir le réseau</option><option>Autre</option>
-        </select></label>
+        <label class="field"><span>Prénom</span><input type="text" name="prenom" maxlength="80" autocomplete="given-name" required></label>
+        <label class="field"><span>Nom</span><input type="text" name="nom" maxlength="80" autocomplete="family-name" required></label>
+      </div>
+      <div class="field"><span class="group-title">Vous êtes</span><div class="opts">${radio('sexe', 'femme', 'Une femme')}${radio('sexe', 'homme', 'Un homme')}</div></div>
+      <div class="field">
+        <span class="group-title">Naissance</span>
+        <div class="opts">${radio('naiss_mode', 'date', 'Je donne ma date', true)}${radio('naiss_mode', 'annee', 'Seulement l’année')}</div>
+        <div class="naiss">
+          <input type="date" name="date_naissance" aria-label="Date de naissance">
+          <input type="number" name="annee_naissance" aria-label="Année de naissance" placeholder="ex. 1990" min="1920" inputmode="numeric" hidden>
+          <output id="age-preview"></output>
+        </div>
+        <span class="hint">Sert uniquement aux statistiques de la communauté. Votre âge se met à jour tout seul et n’est jamais affiché.</span>
       </div>
     </fieldset>
 
     <fieldset>
-      <legend><small>02</small>Votre activité</legend>
+      <legend><small>02</small>Où êtes-vous ?</legend>
       <div class="fgrid c2">
-        <label class="field"><span>Nom de l’entreprise ou du projet <em>(facultatif)</em></span><input type="text" name="entreprise" autocomplete="organization"></label>
-        <label class="field"><span>Secteur</span><select name="secteur">
-          <option value="">Choisir</option>${SECTEURS.map(s => `<option>${esc(s)}</option>`).join('')}
-        </select></label>
+        <label class="field"><span>Commune</span>
+          <span class="combo"><input type="text" name="commune" required autocomplete="off" placeholder="Toulouse, Blagnac, Colomiers…" aria-autocomplete="list" aria-controls="commune-list"><ul id="commune-list" role="listbox" hidden></ul></span>
+        </label>
+        <label class="field"><span>Quartier <em>(facultatif)</em></span><input type="text" name="quartier" maxlength="80" placeholder="Mirail, Bagatelle, Empalot…"></label>
       </div>
-      <label class="field"><span>En deux mots, que faites-vous ? <em>(ou que voulez-vous lancer ?)</em></span><textarea name="activite" placeholder="Ex. : je suis plombier à mon compte depuis 3 ans…"></textarea></label>
+      <span class="hint" style="margin-top:-6px">Sur la future carte, vous serez placé au centre de votre commune, jamais à votre adresse.</span>
+      <div class="field"><span class="group-title">Jusqu’où pouvez-vous vous déplacer pour rendre service ?</span>
+        <div class="opts">${radio('rayon_km', '0', 'Pas de déplacement')}${radio('rayon_km', '5', '5 km')}${radio('rayon_km', '10', '10 km', true)}${radio('rayon_km', '20', '20 km')}${radio('rayon_km', '50', 'Toute la région')}</div>
+      </div>
     </fieldset>
 
     <fieldset>
-      <legend><small>03</small>Entraide</legend>
-      <div class="field"><span class="group-title">Ce que vous pouvez apporter <em>(plusieurs choix)</em></span><div class="opts">${APPORTS.map(v => opt('apports', v)).join('')}</div></div>
-      <div class="field"><span class="group-title">Ce que vous cherchez <em>(plusieurs choix)</em></span><div class="opts">${BESOINS.map(v => opt('besoins', v)).join('')}</div></div>
-      <label class="field"><span>Une idée de nom pour l’association ? <em>(facultatif, on vote ensemble)</em></span><input type="text" name="idee_nom"></label>
-      <label class="field"><span>Un message, une idée de projet ? <em>(facultatif)</em></span><textarea name="message"></textarea></label>
+      <legend><small>03</small>Ce que vous faites</legend>
+      <div class="fgrid c2">
+        <label class="field"><span>Domaine</span><select name="domaine" required><option value="">Choisir</option>${DOMAINES.map(([v, l]) => `<option value="${v}">${esc(l)}</option>`).join('')}</select></label>
+        <label class="field"><span>Votre métier ou ce que vous savez faire</span><input type="text" name="metier" maxlength="120" required placeholder="ex. Mécanicien auto, comptable…"></label>
+      </div>
+      <div class="field"><span class="group-title">Situation</span>
+        <div class="opts">${radio('situation', 'salarie', 'Salarié·e')}${radio('situation', 'independant', 'À mon compte')}${radio('situation', 'etudiant', 'Étudiant·e')}${radio('situation', 'recherche', 'En recherche')}${radio('situation', 'retraite', 'Retraité·e')}${radio('situation', 'autre', 'Autre')}</div>
+      </div>
+      <label class="check"><input type="checkbox" name="cherche_stage"><span>Je cherche un <b>stage, une alternance ou un emploi</b> : la communauté peut m’aider.</span></label>
+      <label class="field"><span>Quelques mots <em>(facultatif)</em></span><textarea name="description" maxlength="600" placeholder="Ce que vous proposez, vos disponibilités, ce que vous cherchez…"></textarea><span class="hint"><span id="desc-count">0</span>/600</span></label>
     </fieldset>
 
-    <div style="display:grid;gap:14px">
-      <label class="check"><input type="checkbox" name="annuaire" value="oui"><span>J’accepte que mon nom, mon activité et mon contact professionnel apparaissent dans l’annuaire des membres (après validation avec moi).</span></label>
-      <label class="check"><input type="checkbox" name="consentement" value="oui" required><span>J’accepte que mes informations soient utilisées par l’association pour me recontacter et gérer mon adhésion. Elles ne sont jamais revendues. <a class="link" href="${r}mentions-legales/">En savoir plus</a></span></label>
-    </div>
+    <fieldset>
+      <legend><small>04</small>Comment vous joindre</legend>
+      <span class="hint" style="margin-top:-8px">Jamais publié. L’équipe s’en sert pour vous mettre en relation quand quelqu’un vous cherche. Au moins un des deux.</span>
+      <div class="fgrid c2">
+        <label class="field"><span>Téléphone</span><input type="tel" name="telephone" autocomplete="tel" inputmode="tel" placeholder="06 12 34 56 78"></label>
+        <label class="field"><span>E-mail</span><input type="email" name="email" autocomplete="email" placeholder="vous@exemple.fr"></label>
+      </div>
+      <label class="check"><input type="checkbox" name="whatsapp" checked><span>Ce numéro est joignable sur WhatsApp</span></label>
+    </fieldset>
 
-    <div class="form-msg" id="form-msg" role="alert" hidden></div>
+    <fieldset>
+      <legend><small>05</small>Comment apparaître</legend>
+      <div class="choices" role="radiogroup" aria-label="Visibilité">
+        <label class="choice"><input type="radio" name="visibilite" value="public"><b>Sous mon prénom</b><small>Affiché « <i id="preview-nom">Prénom N.</i> » avec votre métier et votre commune.</small></label>
+        <label class="choice"><input type="radio" name="visibilite" value="anonyme"><b>De façon anonyme</b><small>Seuls votre métier et votre commune apparaissent. On vous contacte via l’équipe.</small></label>
+      </div>
+      <label class="check"><input type="checkbox" name="consentement" required><span>J’accepte que ces informations soient enregistrées pour l’annuaire de la communauté et affichées selon mon choix ci-dessus. Je peux demander à tout moment leur modification ou leur suppression. <a class="link" href="${r}mentions-legales/">En savoir plus</a></span></label>
+    </fieldset>
+
+    <div class="form-msg err" id="form-error" role="alert" hidden></div>
     <div class="form-foot">
-      <p>Gratuit, sans engagement. Les modalités de cotisation seront présentées à la création officielle de l’association.</p>
-      <button class="btn btn-hl" type="submit">Envoyer mon adhésion ${I.arrow}</button>
+      <p>Gratuit, sans engagement. Votre fiche est vérifiée par l’équipe avant d’être mise en ligne.</p>
+      <button class="btn btn-hl" type="submit">Rejoindre l’annuaire ${I.arrow}</button>
     </div>
   </form>
 
   <div class="done" id="done" tabindex="-1">
     <div class="big">${I.check}</div>
-    <h2>Bienvenue dans le réseau.</h2>
-    <p class="muted">Merci ! Nous avons bien reçu votre demande et nous revenons vers vous très vite. En attendant, partagez le formulaire autour de vous : plus nous serons nombreux, plus le réseau sera utile à chacun.</p>
+    <h2>Merci, <span id="merci-prenom"></span> !</h2>
+    <p class="muted" id="merci-texte">Votre fiche est enregistrée. L’équipe la vérifie avant de la mettre en ligne.</p>
+    <div class="token" id="token" hidden>
+      <p><b>Gardez ce code</b> : il vous permettra de modifier ou supprimer votre fiche plus tard.</p>
+      <code id="jeton"></code><button type="button" class="btn btn-out" id="copy-jeton">Copier</button>
+    </div>
+    <p class="muted">Faites tourner le lien autour de vous : plus on est nombreux, plus l’annuaire est utile.</p>
     <div class="cta"><a class="btn btn-hl" id="wa-share" href="#" target="_blank" rel="noopener">${I.chat} Partager sur WhatsApp</a><a class="btn btn-out" href="${r}">Découvrir le réseau</a></div>
   </div>
   </div>
@@ -464,6 +517,145 @@ const cagnotte = page({
 });
 out('cagnotte/index.html', cagnotte);
 
+// ---------- PAGES DE SECTION (réseautage, compétences, projets) ----------
+// Même gabarit : en-tête, blocs de cartes, liste « concrètement », appel à l'action.
+const sectionPage = ({ slug, crumb, label, h1, lead, title, desc, head, cards, listLabel, listTitle, listIntro, list, note, cta, ctaHref = 'adherer/' }) => page({
+  slug, title: `${title} · ${C.NAME}`, desc,
+  body: r => `
+<div class="page-hero"><div class="wrap">
+  <p class="crumb"><a href="${r}">Accueil</a> › ${crumb}</p>
+  <span class="label">${label}</span>
+  <h1>${h1}</h1>
+  <p class="lead">${lead}</p>
+  <div class="cta" style="margin-top:28px"><a class="btn btn-hl" href="${r}${ctaHref}">${cta} ${I.arrow}</a></div>
+</div></div>
+
+<section><div class="wrap">
+  <div class="head split"><div><span class="label">${head[0]}</span><h2 style="margin-top:16px">${head[1]}</h2></div><p>${head[2]}</p></div>
+  <div class="pillars">${cards.map(([ic, t, d], i) => `<div class="card reveal${cards.length % 2 === 0 || i < cards.length - 1 ? ' wide' : ' full'}"><span class="icon">${I[ic]}</span><h3>${t}</h3><p>${d}</p></div>`).join('')}</div>
+</div></section>
+
+<section class="paper"><div class="wrap two">
+  <div><span class="label">${listLabel}</span><h2 style="margin-top:16px">${listTitle}</h2><p class="muted" style="margin-top:18px">${listIntro}</p></div>
+  <ul class="who">${list.map(([b, s]) => `<li><b>${b}</b><span>${s}</span></li>`).join('')}</ul>
+</div></section>
+
+<section><div class="wrap">
+  ${note ? `<p class="note" style="margin-bottom:40px">${note}</p>` : ''}
+  <div class="final">
+    <div><span class="label" style="color:var(--ink)">Le réseau se construit avec vous</span><h2 style="margin-top:16px">${cta}.</h2></div>
+    <div class="cta"><a class="btn btn-dark" href="${r}${ctaHref}">${cta} ${I.arrow}</a></div>
+  </div>
+</div></section>`,
+});
+
+out('reseautage/index.html', sectionPage({
+  slug: 'reseautage/', crumb: 'Réseautage', label: 'Se rencontrer',
+  title: 'Réseautage entre Comoriens de Toulouse',
+  desc: 'Rencontres entre membres, mises en relation ciblées et liens entre les communautés : le réseautage du réseau des Comoriens de Toulouse.',
+  h1: 'Se connaître, enfin.',
+  lead: 'Nous sommes nombreux à Toulouse, mais dispersés en petits cercles qui ne se croisent pas. Le réseau existe d’abord pour ça : que les Comoriens de Toulouse se rencontrent, se reconnaissent et se recommandent.',
+  head: ['Ce que nous mettons en place', 'Des occasions de se croiser, pour de vrai.', 'Le réseau n’est pas qu’un site : il vit dans les rencontres. Voici ce que nous voulons organiser avec les premiers membres.'],
+  cards: [
+    ['users', 'Rencontres entre membres', 'Des moments réguliers pour se présenter, échanger sur ses projets et faire connaissance au-delà de son quartier ou de son association.'],
+    ['chat', 'Mises en relation ciblées', 'Vous cherchez un associé, un client, un conseil précis ? L’équipe vous présente la bonne personne du réseau.'],
+    ['share', 'Des liens avec les autres communautés', 'Mieux organisés entre nous, nous serons aussi plus faciles à contacter pour les événements et projets menés avec d’autres communautés de Toulouse.'],
+    ['heart', 'Un réseau qui accueille', 'Étudiants qui arrivent, familles qui s’installent : le réseau aide chacun à trouver ses repères dans la communauté toulousaine.'],
+  ],
+  listLabel: 'Concrètement', listTitle: 'À qui ça sert ?', listIntro: 'À toutes celles et ceux qui veulent tisser des liens dans la communauté, entrepreneurs ou non.',
+  list: [
+    ['Les nouveaux arrivants', 'Étudiants, jeunes actifs, familles : rencontrer la communauté dès les premières semaines.'],
+    ['Les entrepreneurs et indépendants', 'Se faire connaître, trouver des partenaires et des clients de confiance.'],
+    ['Les associations', 'Faire circuler les informations et mieux se coordonner entre associations comoriennes de Toulouse.'],
+    ['Tout le monde', 'Savoir qu’un frère ou une sœur de la communauté peut vous aider, à quelques kilomètres.'],
+  ],
+  cta: 'Rejoindre le réseau',
+}));
+
+out('competences/index.html', sectionPage({
+  slug: 'competences/', crumb: 'Compétences', label: 'Partager',
+  title: 'Partage de compétences',
+  desc: 'Compétences, bons plans, démarches administratives, stages : ce que l’un sait, tout le monde en profite dans le réseau des Comoriens de Toulouse.',
+  h1: 'Ce que l’un sait, tout le monde en profite.',
+  lead: 'Dans la communauté, il y a des comptables, des mécaniciens, des juristes, des développeurs, des cuisinières, des étudiants dans tous les domaines. Le partage de compétences, c’est mettre ce savoir à portée de chacun.',
+  head: ['Ce que nous partageons', 'Savoir-faire, conseils, bons plans.', 'Chaque membre peut apporter quelque chose, et chacun peut en bénéficier. Voici les formes que nous voulons donner à ce partage.'],
+  cards: [
+    ['share', 'Ateliers et retours d’expérience', 'Des membres expliquent ce qu’ils connaissent : créer son entreprise, faire sa comptabilité, réussir un dossier, se lancer sur internet.'],
+    ['chat', 'Démarches administratives', 'Titres de séjour, logement, URSSAF, inscriptions : ceux qui sont passés par là guident ceux qui commencent.'],
+    ['seed', 'Stages et premiers emplois', 'Les étudiants et jeunes diplômés de la communauté trouvent plus facilement un stage, une alternance ou un premier poste grâce au réseau.'],
+    ['search', 'Trouver la bonne personne', 'Chaque inscrit indique son domaine et son métier. Quand vous avez besoin d’un conseil, vous savez à qui le demander.'],
+  ],
+  listLabel: 'Comment participer', listTitle: 'Donner, recevoir, les deux.', listIntro: 'Il n’y a pas besoin d’être expert : chacun sait faire quelque chose qui peut aider un autre.',
+  list: [
+    ['Inscrivez votre domaine', 'Le formulaire d’inscription recense ce que chacun sait faire, par domaine.'],
+    ['Proposez un atelier', 'Une heure pour partager ce que vous connaissez avec les membres.'],
+    ['Posez vos questions', 'Une démarche, un projet, une orientation : le réseau vous oriente vers la bonne personne.'],
+    ['Accueillez un stagiaire', 'Vous avez une entreprise ? Un étudiant de la communauté cherche peut-être un stage dans votre domaine.'],
+  ],
+  cta: 'Inscrire mes compétences',
+}));
+
+out('projets/index.html', sectionPage({
+  slug: 'projets/', crumb: 'Projets', label: 'Bâtir',
+  title: 'Projets d’envergure',
+  desc: 'Des projets communautaires ou non, que personne ne porterait seul : le réseau des Comoriens de Toulouse met en commun moyens et savoir-faire.',
+  h1: 'Bâtir ce que personne ne porterait seul.',
+  lead: 'Seul, on monte un projet. Ensemble, on peut voir plus grand : événements, initiatives pour la communauté, projets ici à Toulouse ou au pays. Le réseau met en commun les moyens et les savoir-faire de ses membres.',
+  head: ['Notre approche', 'Des projets choisis et menés ensemble.', 'Les projets viendront des membres. Le rôle du réseau est de les faire émerger, de réunir les bonnes personnes et de trouver les moyens.'],
+  cards: [
+    ['build', 'Projets communautaires', 'Des initiatives utiles à toute la communauté de Toulouse : événements culturels, entraide, accueil des nouveaux arrivants.'],
+    ['users', 'Projets entre membres', 'Plusieurs membres s’associent pour une activité commune, en mettant chacun leur savoir-faire.'],
+    ['heart', 'Projets au pays', 'Des actions qui relient la diaspora toulousaine aux Comores.'],
+    ['seed', 'Les moyens pour avancer', 'Cagnotte communautaire, financement sans intérêt, compétences des membres : le réseau aide à trouver les moyens de chaque projet.'],
+  ],
+  listLabel: 'Comment ça marche', listTitle: 'De l’idée au projet.', listIntro: 'Chaque projet est présenté aux membres avant d’être soutenu. Rien ne se décide sans la communauté.',
+  list: [
+    ['Vous proposez une idée', 'Par le formulaire ou directement auprès de l’équipe.'],
+    ['Les membres en discutent', 'Le projet est présenté, amélioré, et les volontaires se manifestent.'],
+    ['On réunit les moyens', 'Compétences, temps bénévole, cagnotte, financement : chacun apporte ce qu’il peut.'],
+    ['On rend compte', 'Avancement et utilisation des fonds sont partagés avec tous.'],
+  ],
+  note: 'Une journée culturelle se prépare. Les informations seront publiées sur le blog.',
+  cta: 'Proposer un projet',
+}));
+
+// ---------- BLOG ----------
+out('blog/index.html', page({
+  slug: 'blog/',
+  title: `Blog · ${C.NAME}`,
+  desc: 'Les nouvelles de la communauté comorienne de Toulouse : événements, initiatives, vie du réseau.',
+  body: r => `
+<div class="page-hero"><div class="wrap">
+  <p class="crumb"><a href="${r}">Accueil</a> › Blog</p>
+  <span class="label">Le blog</span>
+  <h1>Les nouvelles de la communauté.</h1>
+  <p class="lead">Événements, initiatives et vie de la communauté comorienne de Toulouse. Vous avez une information à partager ? Écrivez-nous.</p>
+</div></div>
+<section style="padding-top:48px"><div class="wrap">
+  <div class="posts">${ARTICLES.map(a => postCard(a, r)).join('')}</div>
+</div></section>`,
+}));
+
+for (const a of ARTICLES) {
+  const others = ARTICLES.filter(o => o !== a).slice(0, 2);
+  out(`blog/${a.slug}/index.html`, page({
+    slug: `blog/${a.slug}/`, ogType: 'article',
+    title: `${a.titre} · ${C.NAME}`,
+    desc: a.resume,
+    body: r => `
+<div class="page-hero"><div class="wrap article-head">
+  <p class="crumb"><a href="${r}">Accueil</a> › <a href="${r}blog/">Blog</a></p>
+  <div class="post-meta"><span class="tag${a.aVenir ? ' soon' : ''}">${esc(a.aVenir ? 'À venir' : a.categorie)}</span><time datetime="${a.date}">${dateFr(a.date)}</time></div>
+  <h1>${esc(a.titre)}</h1>
+  <p class="lead">${esc(a.resume)}</p>
+</div></div>
+<section style="padding-top:48px"><div class="wrap">
+  <article class="prose article">${a.corps(r)}</article>
+  ${others.length ? `<div class="head" style="margin-top:72px"><span class="label">À lire aussi</span></div><div class="posts">${others.map(o => postCard(o, r)).join('')}</div>` : ''}
+</div></section>`,
+  }));
+}
+
 // ---------- MENTIONS LÉGALES (à compléter) ----------
 out('mentions-legales/index.html', page({
   slug: 'mentions-legales/',
@@ -474,12 +666,12 @@ out('mentions-legales/index.html', page({
 <section><div class="wrap prose" style="display:grid;gap:40px;max-width:760px;margin:0 auto">
   <div><h2>Éditeur</h2><p>${esc(C.NAME)}, association en cours de création (loi 1901), Toulouse. Les informations légales (siège, numéro RNA, responsable de la publication) seront ajoutées dès la déclaration en préfecture.</p></div>
   <div><h2>Hébergement</h2><p>GitHub Pages, GitHub Inc., 88 Colin P. Kelly Jr Street, San Francisco, CA 94107, États-Unis.</p></div>
-  <div><h2>Données personnelles</h2><p>Les informations envoyées via le formulaire d’adhésion servent uniquement à vous recontacter, à gérer votre adhésion et, si vous l’avez accepté, à vous faire figurer dans l’annuaire des membres. Elles ne sont ni revendues ni cédées.</p><p>Vous pouvez à tout moment demander l’accès, la rectification ou la suppression de vos données${C.EMAIL ? ` en écrivant à <a class="link" href="mailto:${C.EMAIL}">${esc(C.EMAIL)}</a>` : ' en nous contactant'}.</p></div>
+  <div><h2>Données personnelles</h2><p>Les informations envoyées via le formulaire d’inscription servent uniquement à construire l’annuaire de la communauté et à vous mettre en relation avec d’autres membres. Elles ne sont ni revendues ni cédées.</p><p>Votre âge, votre date de naissance, votre téléphone, votre e-mail et votre adresse ne sont jamais publiés. Sur l’annuaire et la carte, vous apparaissez selon votre choix : sous votre prénom et l’initiale de votre nom, ou de façon anonyme (métier et commune uniquement). Chaque fiche est vérifiée par l’équipe avant d’être mise en ligne.</p><p>Vous pouvez à tout moment demander l’accès, la rectification ou la suppression de vos données${C.EMAIL ? ` en écrivant à <a class="link" href="mailto:${C.EMAIL}">${esc(C.EMAIL)}</a>` : ' en nous contactant'}.</p></div>
 </div></section>`,
 }));
 
 // ---------- sitemap / robots ----------
-const urls = ['', 'adherer/', 'annuaire/', 'financement/', 'cagnotte/', 'mentions-legales/'];
+const urls = ['', 'adherer/', ...NAV.map(([h]) => h), ...ARTICLES.map(a => `blog/${a.slug}/`), 'mentions-legales/'];
 out('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(u => `<url><loc>${C.BASE}/${u}</loc><lastmod>${TODAY}</lastmod></url>`).join('\n')}\n</urlset>\n`);
 out('robots.txt', `User-agent: *\nAllow: /\nSitemap: ${C.BASE}/sitemap.xml\n`);
 console.log(`OK · ${urls.length} pages · ${MEMBERS.length} membre(s) · base ${C.BASE}`);
