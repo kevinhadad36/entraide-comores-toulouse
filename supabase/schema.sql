@@ -116,6 +116,7 @@ revoke all on public.membres from anon, authenticated;
 drop policy if exists "lecture domaines" on public.domaines;
 create policy "lecture domaines" on public.domaines
   for select to anon, authenticated using (true);
+grant select on public.domaines to anon, authenticated;
 
 create or replace function public.inscrire_membre(p jsonb)
 returns uuid
